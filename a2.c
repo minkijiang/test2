@@ -544,7 +544,7 @@ int main() {
 	int pid = fork();
 
 	if (pid != 0) {
-		/*
+		
 		PROCESS* process = createPROCESS(pid);
 
 		char directoryName[MAXLENGTH];
@@ -579,9 +579,10 @@ int main() {
 		struct stat* fileStat;
 
 		printf("%d\n", stat(link, fileStat) );
-		*/
-		PROCESS* process = getProcess(pid);
-		printf("%d", process->fdCount);
+		
+
+		//PROCESS* process = getProcess(pid);
+		//printf("%d", process->fdCount);
 	}
 	else {
 		wait_ms(2000000);
