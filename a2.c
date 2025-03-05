@@ -75,21 +75,26 @@ char* getProcessDirectory(int pid) {
 
 
 
-int* getStringLengths(PROCESS* process) {
-	int maxPidLength = ceil(log10(process->pid));
+int* getStringLengths(PROCESS** processes, int processCount) {
+	int maxPidLength = 0;
 	int maxFdLength = 0;
 	int maxFileLength = 0;
 	int maxInodeLength = 0;
 
-	for (int i = 0; i < process->fdCount; i++) {
-		int fdLength = 1;
-		if (process->FDarr[i]->fd > 0) {fdLength = log10(process->FDarr[i]->fd)+1;}
-		int fileLength = strlen(process->FDarr[i]->file);
-		int inodeLength = log10(process->FDarr[i]->inode)+1;
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int pidLength = log10(process->pid)+1;
+			int fdLength = 1;
+			if (process->FDarr[k]->fd > 0) {fdLength = log10(process->FDarr[k]->fd)+1;}
+			int fileLength = strlen(process->FDarr[k]->file);
+			int inodeLength = log10(process->FDarr[k]->inode)+1;
 
-		if (fdLength > maxFdLength) {maxFdLength = fdLength;}
-		if (fileLength > maxFdLength) {maxFileLength = fileLength;}
-		if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
+			if (pidLength > maxPidLength) {maxPidLength = pidLength;}
+			if (fdLength > maxFdLength) {maxFdLength = fdLength;}
+			if (fileLength > maxFdLength) {maxFileLength = fileLength;}
+			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
+		}
 	}
 
 	int* lengths = malloc(4*sizeof(int));
@@ -100,8 +105,6 @@ int* getStringLengths(PROCESS* process) {
 
 	return lengths;
 }
-
-
 
 
 FD* createFD(int fd, char file[MAXLENGTH], int inode) {
@@ -195,12 +198,11 @@ bool isValidProcess(int pid) {
 	return true;
 }
 
-void displayProcessFD(PROCESS* process) {
-	FD** fd = process->FDarr;
-
+void displayProcessFD(PROCESS** processes, int processCount) {
+	
 	printf("\n\n");
 	printf("PID");
-	int* lengths = getStringLengths(process);
+	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
@@ -210,9 +212,12 @@ void displayProcessFD(PROCESS* process) {
 	}
 	printf("\n");
 
-	for (int i = 0; i < process->fdCount; i++) {
-		int fd = process->FDarr[i]->fd;
-		printf("%d   %d\n", process->pid, fd);
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int fd = process->FDarr[k]->fd;
+			printf("%d   %d\n", process->pid, fd);
+		}
 	}
 
 	for (int i = 0; i < lengths[0]+lengths[1]+strlen("PID")+strlen("FD"); i++) {
@@ -223,12 +228,11 @@ void displayProcessFD(PROCESS* process) {
 	free(lengths);
 }
 
-void displaySystemWide(PROCESS* process) {
-	FD** fd = process->FDarr;
+void displaySystemWide(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
 	printf("PID");
-	int* lengths = getStringLengths(process);
+	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
@@ -238,9 +242,12 @@ void displaySystemWide(PROCESS* process) {
 	}
 	printf("\n");
 
-	for (int i = 0; i < process->fdCount; i++) {
-		char* file = process->FDarr[i]->file;
-		printf("%d   %s\n", process->pid, file);
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			char* file = process->FDarr[k]->file;
+			printf("%d   %s\n", process->pid, file);
+		}
 	}
 
 	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
@@ -251,12 +258,11 @@ void displaySystemWide(PROCESS* process) {
 	free(lengths);
 }
 
-void displayVnode(PROCESS* process) {
-	FD** fd = process->FDarr;
+void displayVnode(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
 	printf("PID");
-	int* lengths = getStringLengths(process);
+	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
@@ -266,10 +272,15 @@ void displayVnode(PROCESS* process) {
 	}
 	printf("\n");
 
-	for (int i = 0; i < process->fdCount; i++) {
-		long long int inode = process->FDarr[i]->inode;
-		printf("%d   %lld\n", process->pid, inode);
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			long long int inode = process->FDarr[k]->inode;
+			printf("%d   %lld\n", process->pid, inode);
+		}
 	}
+
+
 
 	for (int i = 0; i < lengths[0]+lengths[3]+strlen("PID")+strlen("Inode"); i++) {
 		printf("=");
@@ -279,12 +290,11 @@ void displayVnode(PROCESS* process) {
 	free(lengths);
 }
 
-void displayComposite(PROCESS* process) {
-	FD** fd = process->FDarr;
+void displayComposite(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
 	printf("PID");
-	int* lengths = getStringLengths(process);
+	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
@@ -303,12 +313,17 @@ void displayComposite(PROCESS* process) {
 	}
 	printf("\n");
 
-	for (int i = 0; i < process->fdCount; i++) {
-		int fd = process->FDarr[i]->fd;
-		char* file = process->FDarr[i]->file;
-		long long int inode = process->FDarr[i]->inode;
-		printf("%d   %d   %s   %lld\n", process->pid, fd, file, inode);
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int fd = process->FDarr[k]->fd;
+			char* file = process->FDarr[k]->file;
+			long long int inode = process->FDarr[k]->inode;
+			printf("%d   %d   %s   %lld\n", process->pid, fd, file, inode);
+		}
 	}
+
+
 
 	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
 		printf("=");
@@ -319,25 +334,48 @@ void displayComposite(PROCESS* process) {
 	free(lengths);
 }
 
-void writeCompositeTXT(PROCESS* process) {
+void writeCompositeTXT(PROCESS** processes,  int processCount) {
 	FILE* file = fopen("compositeTable.txt", "w");
 	if (file == NULL) {
 		fprintf(stderr, "Error: could not write to compositeTable.txt");
 		exit(1);
 	}
 
-	FD** fd = process->FDarr;
-
-	fprintf(file, "\n\n");
-	fprintf(file, "PID			FD			Filename			Inode\n");
-	fprintf(file, "==================================================\n");
-	for (int i = 0; i < process->fdCount; i++) {
-		int fd = process->FDarr[i]->fd;
-		char* filename = process->FDarr[i]->file;
-		long long int inode = process->FDarr[i]->inode;
-		fprintf(file, "%d   %d   %s   %lld\n", process->pid, fd, filename, inode);
+	fprintf(file, "PID");
+	int* lengths = getStringLengths(processes, processCount);
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
+		fprintf(file, " ");
 	}
-	fprintf(file, "==================================================\n");
+	fprintf(file, "FD");
+	for (int i = 0; i < lengths[1]+3-strlen("FD"); i++) {
+		fprintf(file, " ");
+	}
+	fprintf(file, "Filename");
+	for (int i = 0; i < lengths[2]+3-strlen("Filename"); i++) {
+		fprintf(file, " ");
+	}
+	fprintf(file, "Inode\n");
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		fprintf(file, "=");
+	}
+	fprintf(file, "\n");
+
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int fd = process->FDarr[k]->fd;
+			char* filename = process->FDarr[k]->file;
+			long long int inode = process->FDarr[k]->inode;
+			fprintf(file, "%d   %d   %s   %lld\n", process->pid, fd, filename, inode);
+		}
+	}
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		fprintf(file, "=");
+	}
+
+	free(lengths);
 
 	int isClosed = fclose(file);
 	if (isClosed != 0) {
@@ -346,7 +384,7 @@ void writeCompositeTXT(PROCESS* process) {
 	}
 }
 
-void writeCompositeBIN(PROCESS* process) {
+void writeCompositeBIN(PROCESS** processes, int processCount) {
 	FILE* file = fopen("compositeTable.bin", "wb");
 
 	if (file == NULL) {
@@ -354,18 +392,20 @@ void writeCompositeBIN(PROCESS* process) {
 		exit(1);
 	}
 
-	FD** fd = process->FDarr;
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int fd = process->FDarr[k]->fd;
+			char* filename = process->FDarr[k]->file;
+			long long int inode = process->FDarr[k]->inode;
 
-	for (int i = 0; i < process->fdCount; i++) {
-		int fd = process->FDarr[i]->fd;
-		char* filename = process->FDarr[i]->file;
-		long long int inode = process->FDarr[i]->inode;
-
-		fwrite(&process->pid, sizeof(int), 1, file);
-		fwrite(&fd, sizeof(int), 1, file);
-		fwrite(filename, sizeof(char), MAXLENGTH-1, file); 
-		fwrite(&inode, sizeof(long long int), 1, file);
+			fwrite(&process->pid, sizeof(int), 1, file);
+			fwrite(&fd, sizeof(int), 1, file);
+			fwrite(filename, sizeof(char), MAXLENGTH-1, file); 
+			fwrite(&inode, sizeof(long long int), 1, file);
+		}
 	}
+
 	int end = END;
 	fwrite(&end, sizeof(int), 1, file);
 
@@ -526,27 +566,25 @@ void display(DISPLAYINFO* displayInfo) {
 		if (displayInfo->isSummary) {displaySummary(allProcesses, processCount);}
 		if (displayInfo->threshold != NOTHRESHOLD) {displayOffending(allProcesses, processCount,displayInfo->threshold);}
 
-		for (int i = 0; i < processCount; i++ ) {
-			PROCESS* process = *(allProcesses+i);
-			if (displayInfo->isProcessFD) {displayProcessFD(process);}
-			if (displayInfo->isSystemWide) {displaySystemWide(process);}
-			if (displayInfo->isVnode) {displayVnode(process);}
-			if (displayInfo->isComposite) {displayComposite(process);}
-			if (displayInfo->outputTXT) {writeCompositeTXT(process);}
-			if (displayInfo->outputBIN) {writeCompositeBIN(process);}
-		}
+		if (displayInfo->isProcessFD) {displayProcessFD(allProcesses, processCount);}
+		if (displayInfo->isSystemWide) {displaySystemWide(allProcesses, processCount);}
+		if (displayInfo->isVnode) {displayVnode(allProcesses, processCount);}
+		if (displayInfo->isComposite) {displayComposite(allProcesses, processCount);}
+		if (displayInfo->outputTXT) {writeCompositeTXT(allProcesses, processCount);}
+		if (displayInfo->outputBIN) {writeCompositeBIN(allProcesses, processCount);}
+		
 	}
 	else {
 		PROCESS* process = getProcess(displayInfo->pid);
 
-		if (displayInfo->isProcessFD) {displayProcessFD(process);}
-		if (displayInfo->isSystemWide) {displaySystemWide(process);}
-		if (displayInfo->isVnode) {displayVnode(process);}
-		if (displayInfo->isComposite) {displayComposite(process);}
+		if (displayInfo->isProcessFD) {displayProcessFD(&process, 1);}
+		if (displayInfo->isSystemWide) {displaySystemWide(&process, 1);}
+		if (displayInfo->isVnode) {displayVnode(&process, 1);}
+		if (displayInfo->isComposite) {displayComposite(&process, 1);}
 		if (displayInfo->isSummary) {displaySummary(allProcesses, processCount);}
 		if (displayInfo->threshold != NOTHRESHOLD) {displayOffending(allProcesses, processCount, displayInfo->threshold);}
-		if (displayInfo->outputTXT) {writeCompositeTXT(process);}
-		if (displayInfo->outputBIN) {writeCompositeBIN(process);}
+		if (displayInfo->outputTXT) {writeCompositeTXT(&process, 1);}
+		if (displayInfo->outputBIN) {writeCompositeBIN(&process, 1);}
 		freeAllPROCESS(&process, 1);
 	}
 
@@ -648,14 +686,15 @@ int main() {
 
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
-		displayProcessFD(process);
-		displaySystemWide(process);
-		displayVnode(process);
-		displayComposite(process);
+		displayProcessFD(&process, 1);
+		displaySystemWide(&process, 1);
+		displayVnode(&process, 1);
+		displayComposite(&process, 1);
 	}
 	else {
 		wait_ms(2000000);
 	}
+	//TODO: remove duplicates
 	
 
 
