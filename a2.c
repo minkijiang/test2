@@ -565,12 +565,12 @@ int main() {
 
 
 		printf("%ld\n", readlink(link, target, (MAXLENGTH-1)*sizeof(char)) );
-		printf("%s\n", target );
+		printf("%s\n", target);
 
 
-		struct stat* fileStat;
+		//struct stat* fileStat;
 
-		printf("%d\n", stat(link, fileStat) );
+		//printf("%d\n", stat(link, fileStat) );
 	}
 	
 
