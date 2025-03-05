@@ -537,8 +537,26 @@ int main() {
 	int pid = fork();
 
 	if (pid != 0) {
-		PROCESS* process = getProcess(pid);
-		printf("%d", process->fdCount);
+		PROCESS* process = createPROCESS(pid);
+
+		char directoryName[MAXLENGTH];
+		strcpy(directoryName, process->processDirectory);
+		strcat(directoryName, "/fd");
+
+		DIR* dir = opendir(directoryName);
+		if (dir == NULL) {
+			fprintf(stderr, "failed to read process directory");
+			exit(1);
+		}
+
+		process->fdCount = getFdCount(pid);
+		process->FDarr = malloc((process->fdCount)*sizeof(FD));
+
+		skip(dir);
+		DIRECTORYINFO directoryInfo = readdir(dir);
+		int fd = strtol(directoryInfo->d_name, NULL, 10);
+
+		printf("%d", fd);
 	}
 	
 
