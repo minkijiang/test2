@@ -536,6 +536,9 @@ int main() {
 	//getFdCount(1);
 
 	DIR* dir = opendir("/proc/1/fd");
+	if (dir == NULL) {
+		printf("failed to open");
+	}
 
 
 	return 0;
