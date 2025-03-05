@@ -533,12 +533,23 @@ int test(int argc, char** argv) {
 
 int main() {
 
-	//getFdCount(1);
+	int pid = fork();
+	
+	char directoryName[MAXLENGTH];
 
-	DIR* dir = opendir("/proc/1/fd");
+	strcpy(directoryName, getProcessDirectory(pid));
+	strcat(directoryName, "/fd");
+
+	DIR* dir = opendir(directoryName);
+
 	if (dir == NULL) {
 		printf("failed to open");
 	}
+	else {
+		printf("open sucessful");
+	}
+
+
 
 
 	return 0;
