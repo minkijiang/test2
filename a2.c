@@ -395,8 +395,8 @@ int getAllProcesses(PROCESS** processArr) {
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
 	for (int i = 0; directoryInfo != NULL; i++) {
-		if (strtol(directoryInfo->d_name, NULL, 10) > 0) {
-			int pid = strtol(directoryInfo->d_name, NULL, 10);
+		int pid = strtol(directoryInfo->d_name, NULL, 10);
+		if (isValidProcess(pid)) {
 			processArr[i] = getProcess(pid);
 		}
 		directoryInfo = readdir(dir);
@@ -545,7 +545,7 @@ int main() {
 
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
-		printf("%d", process->fdCount);
+		displayComposite(process);
 	}
 	else {
 		wait_ms(2000000);
