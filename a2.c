@@ -138,10 +138,8 @@ bool isValidProcess(int pid) {
 		return true;
 	}
 
-	char processDirectory[MAXLENGTH];
-
-	strcpy(directoryName, getProcessDirectory(pid));
-	strcat(directoryName, "/fd");
+	char* processDirectory = getProcessDirectory(pid);
+	strcat(processDirectory, "/fd");
 
 	DIR* dir = opendir(processDirectory);
 	free(processDirectory);
