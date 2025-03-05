@@ -648,6 +648,9 @@ int main() {
 
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
+		displayProcessFD(process);
+		displaySystemWide(process);
+		displayVnode(process);
 		displayComposite(process);
 	}
 	else {
