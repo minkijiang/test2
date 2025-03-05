@@ -578,8 +578,13 @@ int main() {
 
 		struct stat* fileStat;
 
-		printf("%d\n", stat(link, fileStat) );
-		
+		if (lstat(link, fileStat) == -1) {
+			perror("stat failed");
+			return 1;
+		}
+		else {
+			printf("%d\n", lstat(link, fileStat) );
+		}
 
 		//PROCESS* process = getProcess(pid);
 		//printf("%d", process->fdCount);
