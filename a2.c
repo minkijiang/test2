@@ -302,9 +302,7 @@ void displayOffending(PROCESS** processes, int processNumber, int threshold) {
 int getFdCount(int pid) {
 	char directoryName[MAXLENGTH];
 
-	char* processDirectory = getProcessDirectory(pid);
-
-	strcpy(directoryName, processDirectory);
+	strcpy(directoryName, getProcessDirectory(pid));
 	strcat(directoryName, "/fd");
 
 	DIR* dir = opendir(directoryName);
@@ -537,7 +535,8 @@ int main() {
 
 	//getFdCount(1);
 
-	DIR* dir = opendir("/proc/1");
+	DIR* dir = opendir("/proc/1/fd");
+
 
 	return 0;
 }
