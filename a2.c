@@ -568,9 +568,9 @@ int main() {
 		printf("%s\n", target);
 
 
-		//struct stat* fileStat;
+		struct stat* fileStat;
 
-		//printf("%d\n", stat(link, fileStat) );
+		printf("%d\n", stat(link, fileStat) );
 	}
 	
 
