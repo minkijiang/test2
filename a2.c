@@ -535,7 +535,9 @@ int test(int argc, char** argv) {
 
 int main() {
 
-	getFdCount(1);
+	//getFdCount(1);
+
+	DIR* dir = opendir("/proc/1");
 
 	return 0;
 }
