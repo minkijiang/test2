@@ -576,15 +576,15 @@ int main() {
 		printf("%s\n", target);
 
 
-		struct stat* fileStat;
+		struct stat fileStat;
 
-		int n = stat(link, fileStat);
+		int n = stat(link, &fileStat);
 		if (n == -1) {
 			perror("stat failed");
 			return 1;
 		}
 		else {
-			printf("%d\n", n );
+			printf("%lld\n", fileStat.st_ino );
 		}
 
 		//PROCESS* process = getProcess(pid);
