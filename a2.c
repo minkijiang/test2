@@ -564,7 +564,8 @@ int main() {
 		strcat(link, directoryInfo->d_name);
 
 
-		printf("%ld", readlink(link, target, (MAXLENGTH-1)*sizeof(char)) );
+		printf("%ld\n", readlink(link, target, (MAXLENGTH-1)*sizeof(char)) );
+		printf("%s\n", target );
 	}
 	
 
