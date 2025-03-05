@@ -82,7 +82,8 @@ int* getStringLengths(PROCESS* process) {
 	int maxInodeLength = 0;
 
 	for (int i = 0; i < process->fdCount; i++) {
-		int fdLength = log10(process->FDarr[i]->fd)+1;
+		int fdLength = 1;
+		if (process->FDarr[i]->fd > 0) {fdLength = log10(process->FDarr[i]->fd)+1;}
 		int fileLength = strlen(process->FDarr[i]->file);
 		int inodeLength = log10(process->FDarr[i]->inode)+1;
 
@@ -477,7 +478,7 @@ PROCESS* getProcess(int pid) {
 
 		process->FDarr[i] = createFD(fd, target, inode);
 
-		DIRECTORYINFO directoryInfo = readdir(dir);
+		directoryInfo = readdir(dir);
 
 	}
 
