@@ -82,9 +82,9 @@ int* getStringLengths(PROCESS* process) {
 	int maxInodeLength = 0;
 
 	for (int i = 0; i < process->fdCount; i++) {
-		int fdLength = ceil(log10(process->FDarr[i]->fd));
+		int fdLength = log10(process->FDarr[i]->fd)+1;
 		int fileLength = strlen(process->FDarr[i]->file);
-		int inodeLength = ceil(log10(process->FDarr[i]->inode));
+		int inodeLength = log10(process->FDarr[i]->inode)+1;
 
 		if (fdLength > maxFdLength) {maxFdLength = fdLength;}
 		if (fileLength > maxFdLength) {maxFileLength = fileLength;}
@@ -218,6 +218,8 @@ void displayProcessFD(PROCESS* process) {
 		printf("=");
 	}
 	printf("\n");
+
+	free(lengths);
 }
 
 void displaySystemWide(PROCESS* process) {
@@ -244,6 +246,8 @@ void displaySystemWide(PROCESS* process) {
 		printf("=");
 	}
 	printf("\n");
+
+	free(lengths);
 }
 
 void displayVnode(PROCESS* process) {
@@ -270,6 +274,8 @@ void displayVnode(PROCESS* process) {
 		printf("=");
 	}
 	printf("\n");
+
+	free(lengths);
 }
 
 void displayComposite(PROCESS* process) {
@@ -308,6 +314,8 @@ void displayComposite(PROCESS* process) {
 	}
 
 	printf("\n");
+
+	free(lengths);
 }
 
 void writeCompositeTXT(PROCESS* process) {
@@ -444,6 +452,7 @@ PROCESS* getProcess(int pid) {
 	DIRECTORYINFO directoryInfo = readdir(dir);
 
 	for (int i = 0; i < process->fdCount; i++) {
+
 		int fd = strtol(directoryInfo->d_name, NULL, 10);
 
 		char target[MAXLENGTH];
@@ -467,6 +476,8 @@ PROCESS* getProcess(int pid) {
 		long long int inode = (long long int)fileStat.st_ino;
 
 		process->FDarr[i] = createFD(fd, target, inode);
+
+		DIRECTORYINFO directoryInfo = readdir(dir);
 
 	}
 
