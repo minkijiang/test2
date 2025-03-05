@@ -690,10 +690,13 @@ int main() {
 		displaySystemWide(&process, 1);
 		displayVnode(&process, 1);
 		displayComposite(&process, 1);
+		writeCompositeTXT(&process, 1);
+		writeCompositeBIN(&process, 1);
 	}
 	else {
 		wait_ms(2000000);
 	}
+
 	//TODO: remove duplicates
 	
 
