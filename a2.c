@@ -556,7 +556,15 @@ int main() {
 		DIRECTORYINFO directoryInfo = readdir(dir);
 		int fd = strtol(directoryInfo->d_name, NULL, 10);
 
-		printf("%d", fd);
+		char target[MAXLENGTH];
+
+		char link[MAXLENGTH];
+		strcpy(link, directoryName);
+		strcat(link, "/");
+		strcat(link, directoryInfo->d_name);
+
+
+		printf("%ld", readlink(link, target, (MAXLENGTH-1)*sizeof(char)) );
 	}
 	
 
