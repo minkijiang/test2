@@ -536,8 +536,11 @@ int main() {
 
 	int pid = fork();
 
-	printf("%d", getFdCount(pid));
-
+	if (pid != 0) {
+		PROCESS* process = getProcess(pid);
+		printf("%d", process->fdCount);
+	}
+	
 
 
 
