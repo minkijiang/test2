@@ -584,8 +584,7 @@ int main() {
 			return 1;
 		}
 		else {
-			//printf("%lld\n", fileStat.st_ino );
-			printf("%d", n);
+			printf("%lld\n", (long long int)fileStat.st_ino );
 		}
 
 		//PROCESS* process = getProcess(pid);
