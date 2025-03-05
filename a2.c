@@ -138,8 +138,11 @@ bool isValidProcess(int pid) {
 		return true;
 	}
 
+	char processDirectory[MAXLENGTH];
 
-	char* processDirectory = getProcessDirectory(pid);
+	strcpy(directoryName, getProcessDirectory(pid));
+	strcat(directoryName, "/fd");
+
 	DIR* dir = opendir(processDirectory);
 	free(processDirectory);
 
@@ -534,20 +537,8 @@ int test(int argc, char** argv) {
 int main() {
 
 	int pid = fork();
-	
-	char directoryName[MAXLENGTH];
 
-	strcpy(directoryName, getProcessDirectory(pid));
-	strcat(directoryName, "/fd");
-
-	DIR* dir = opendir(directoryName);
-
-	if (dir == NULL) {
-		printf("failed to open");
-	}
-	else {
-		printf("open sucessful");
-	}
+	printf("%d", getFdCount(pid));
 
 
 
