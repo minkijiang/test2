@@ -19,7 +19,7 @@
 typedef struct FD {
 	int fd;
 	char file[MAXLENGTH];
-	int inode;
+	long long int inode;
 } FD;
 
 typedef struct PROCESS {
@@ -198,8 +198,8 @@ void displayVnode(PROCESS* process) {
 	printf("PID			Inode\n");
 	printf("=================\n");
 	for (int i = 0; i < process->fdCount; i++) {
-		int inode = process->FDarr[i]->inode;
-		printf("%d   %d\n", process->pid, inode);
+		long long int inode = process->FDarr[i]->inode;
+		printf("%d   %lld\n", process->pid, inode);
 	}
 	printf("=================\n");
 }
@@ -213,8 +213,8 @@ void displayComposite(PROCESS* process) {
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
 		char* file = process->FDarr[i]->file;
-		int inode = process->FDarr[i]->inode;
-		printf("%d   %d   %s   %d\n", process->pid, fd, file, inode);
+		long long int inode = process->FDarr[i]->inode;
+		printf("%d   %d   %s   %lld\n", process->pid, fd, file, inode);
 	}
 	printf("=============================================\n");
 }
@@ -234,8 +234,8 @@ void writeCompositeTXT(PROCESS* process) {
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
 		char* filename = process->FDarr[i]->file;
-		int inode = process->FDarr[i]->inode;
-		fprintf(file, "%d   %d   %s   %d\n", process->pid, fd, filename, inode);
+		long long int inode = process->FDarr[i]->inode;
+		fprintf(file, "%d   %d   %s   %lld\n", process->pid, fd, filename, inode);
 	}
 	fprintf(file, "==================================================\n");
 
@@ -259,12 +259,12 @@ void writeCompositeBIN(PROCESS* process) {
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
 		char* filename = process->FDarr[i]->file;
-		int inode = process->FDarr[i]->inode;
+		long long int inode = process->FDarr[i]->inode;
 
 		fwrite(&process->pid, sizeof(int), 1, file);
 		fwrite(&fd, sizeof(int), 1, file);
 		fwrite(filename, sizeof(char), MAXLENGTH-1, file); 
-		fwrite(&inode, sizeof(int), 1, file);
+		fwrite(&inode, sizeof(long long int), 1, file);
 	}
 	int end = END;
 	fwrite(&end, sizeof(int), 1, file);
@@ -367,13 +367,13 @@ PROCESS* getProcess(int pid) {
 			exit(1);
 		}
 
-		struct stat* fileStat;
-		if (stat(link, fileStat) == -1) {
+		struct stat fileStat;
+		if (stat(link, &fileStat) == -1) {
 			fprintf(stderr, "failed to read fd");
 			exit(1);
 		}
 
-		int inode = fileStat->st_ino;
+		long long int inode = (long long int)fileStat.st_ino;
 
 		process->FDarr[i] = createFD(fd, target, inode);
 
