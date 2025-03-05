@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-
+#include <math.h>
 #include <time.h>
 
 #define MAXLENGTH 256
@@ -72,6 +72,35 @@ char* getProcessDirectory(int pid) {
 	return directoryName;
 
 }
+
+
+
+int* getStringLengths(PROCESS* process) {
+	int maxPidLength = ceil(log10(process->pid));
+	int maxFdLength = 0;
+	int maxFileLength = 0;
+	int maxInodeLength = 0;
+
+	for (int i = 0; i < process->fdCount; i++) {
+		int fdLength = ceil(log10(process->FDarr[i]->fd));
+		int fileLength = strlen(process->FDarr[i]->file);
+		int inodeLength = ceil(log10(process->FDarr[i]->inode));
+
+		if (fdLength > maxFdLength) {maxFdLength = fdLength;}
+		if (fileLength > maxFdLength) {maxFileLength = fileLength;}
+		if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
+	}
+
+	int* lengths = malloc(4*sizeof(int));
+	lengths[0] = maxPidLength;
+	lengths[1] = maxFdLength;
+	lengths[2] = maxFileLength;
+	lengths[3] = maxInodeLength;
+
+	return lengths;
+}
+
+
 
 
 FD* createFD(int fd, char file[MAXLENGTH], int inode) {
@@ -169,30 +198,69 @@ void displayProcessFD(PROCESS* process) {
 	FD** fd = process->FDarr;
 
 	printf("\n\n");
-	printf("PID			FD\n");
-	printf("==============\n");
+	printf("PID");
+	int* lengths = getStringLengths(process);
+	for (int i = 0; i < lengths[0]; i++) {
+		printf(" ");
+	}
+	printf("FD\n");
+	for (int i = 0; i < lengths[0]+lengths[1]+strlen("PID")+strlen("FD"); i++) {
+		printf("=");
+	}
+	printf("\n");
+
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
 		printf("%d   %d\n", process->pid, fd);
 	}
-	printf("==============\n");
+
+	for (int i = 0; i < lengths[0]+lengths[1]+strlen("PID")+strlen("FD"); i++) {
+		printf("=");
+	}
+	printf("\n");
 }
 
 void displaySystemWide(PROCESS* process) {
 	FD** fd = process->FDarr;
 
 	printf("\n\n");
-	printf("PID			Filename\n");
-	printf("====================\n");
+	printf("PID");
+	int* lengths = getStringLengths(process);
+	for (int i = 0; i < lengths[0]; i++) {
+		printf(" ");
+	}
+	printf("Filename\n");
+	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
+		printf("=");
+	}
+	printf("\n");
+
 	for (int i = 0; i < process->fdCount; i++) {
 		char* file = process->FDarr[i]->file;
 		printf("%d   %s\n", process->pid, file);
 	}
-	printf("====================\n");
+
+	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
+		printf("=");
+	}
+	printf("\n");
 }
 
 void displayVnode(PROCESS* process) {
 	FD** fd = process->FDarr;
+
+	printf("\n\n");
+	printf("PID");
+	int* lengths = getStringLengths(process);
+	for (int i = 0; i < lengths[0]; i++) {
+		printf(" ");
+	}
+	printf("Inode\n");
+	for (int i = 0; i < lengths[0]+lengths[3]+strlen("PID")+strlen("Inode"); i++) {
+		printf("=");
+	}
+	printf("\n");
+
 
 	printf("\n\n");
 	printf("PID			Inode\n");
@@ -201,22 +269,49 @@ void displayVnode(PROCESS* process) {
 		long long int inode = process->FDarr[i]->inode;
 		printf("%d   %lld\n", process->pid, inode);
 	}
-	printf("=================\n");
+
+	for (int i = 0; i < lengths[0]+lengths[3]+strlen("PID")+strlen("Inode"); i++) {
+		printf("=");
+	}
+	printf("\n");
 }
 
 void displayComposite(PROCESS* process) {
 	FD** fd = process->FDarr;
 
 	printf("\n\n");
-	printf("PID			FD			Filename			Inode\n");
-	printf("=============================================\n");
+	printf("PID");
+	int* lengths = getStringLengths(process);
+	for (int i = 0; i < lengths[0]; i++) {
+		printf(" ");
+	}
+	printf("FD");
+	for (int i = 0; i < lengths[1]; i++) {
+		printf(" ");
+	}
+	printf("Filename");
+	for (int i = 0; i < lengths[2]; i++) {
+		printf(" ");
+	}
+	printf("Inode\n");
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		printf("=");
+	}
+	printf("\n");
+
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
 		char* file = process->FDarr[i]->file;
 		long long int inode = process->FDarr[i]->inode;
 		printf("%d   %d   %s   %lld\n", process->pid, fd, file, inode);
 	}
-	printf("=============================================\n");
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		printf("=");
+	}
+
+	printf("\n");
 }
 
 void writeCompositeTXT(PROCESS* process) {
