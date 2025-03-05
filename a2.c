@@ -200,7 +200,7 @@ void displayProcessFD(PROCESS* process) {
 	printf("\n\n");
 	printf("PID");
 	int* lengths = getStringLengths(process);
-	for (int i = 0; i < lengths[0]; i++) {
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
 	printf("FD\n");
@@ -226,7 +226,7 @@ void displaySystemWide(PROCESS* process) {
 	printf("\n\n");
 	printf("PID");
 	int* lengths = getStringLengths(process);
-	for (int i = 0; i < lengths[0]; i++) {
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
 	printf("Filename\n");
@@ -252,7 +252,7 @@ void displayVnode(PROCESS* process) {
 	printf("\n\n");
 	printf("PID");
 	int* lengths = getStringLengths(process);
-	for (int i = 0; i < lengths[0]; i++) {
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
 	printf("Inode\n");
@@ -261,10 +261,6 @@ void displayVnode(PROCESS* process) {
 	}
 	printf("\n");
 
-
-	printf("\n\n");
-	printf("PID			Inode\n");
-	printf("=================\n");
 	for (int i = 0; i < process->fdCount; i++) {
 		long long int inode = process->FDarr[i]->inode;
 		printf("%d   %lld\n", process->pid, inode);
@@ -282,15 +278,15 @@ void displayComposite(PROCESS* process) {
 	printf("\n\n");
 	printf("PID");
 	int* lengths = getStringLengths(process);
-	for (int i = 0; i < lengths[0]; i++) {
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
 	}
 	printf("FD");
-	for (int i = 0; i < lengths[1]; i++) {
+	for (int i = 0; i < lengths[1]+3-strlen("FD"); i++) {
 		printf(" ");
 	}
 	printf("Filename");
-	for (int i = 0; i < lengths[2]; i++) {
+	for (int i = 0; i < lengths[2]+3-strlen("Filename"); i++) {
 		printf(" ");
 	}
 	printf("Inode\n");
