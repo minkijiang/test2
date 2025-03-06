@@ -507,14 +507,14 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 void displaySummary(PROCESS** processes, int numProcess) {
 	printf("\n\n");
 	printf("Summary Table\n");
-	printf("=============\n");
+	printf("==================\n");
 
 	for (int i = 0; i < numProcess; i++) {
 		int pid = processes[i]->pid;
 		int fdCount = processes[i]->fdCount;
-		printf("%d : %d FD\n", pid, fdCount);
+		printf("%d : %d FDs\n", pid, fdCount);
 	}
-	printf("=============\n");
+	printf("==================\n");
 }
 
 void displayOffending(PROCESS** processes, int processNumber, int threshold) {
@@ -524,7 +524,7 @@ void displayOffending(PROCESS** processes, int processNumber, int threshold) {
 		int pid = processes[i]->pid;
 		int fdCount = processes[i]->fdCount;
 		if (fdCount >= threshold) {
-			printf("%d : %d FD\n", pid, fdCount);
+			printf("%d : %d FDs\n", pid, fdCount);
 		}
 		
 	}
@@ -824,6 +824,7 @@ int main() {
 		writeCompositeBIN(processes, 2);
 
 		displaySummary(processes, 2);
+		displayOffending(processes, 2, 1);
 		
 
 	}
