@@ -787,6 +787,9 @@ PROCESS** getprocessesTEST() {
 			pid = fork();
 			processes[i] = createPROCESS(pid);
 		}
+		else {
+			wait_ms(2000000);
+		}
 	}
 
 	return processes;
@@ -812,8 +815,7 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		//displayComposite(&processes[0], 1);
-		printf("%d\n", processes[0]->fdCount);
+		displayComposite(&processes[0], 1);
 	
 
 
