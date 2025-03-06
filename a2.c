@@ -789,8 +789,10 @@ PROCESS** getprocessesTEST() {
 		}
 		else {
 			wait_ms(2000000);
+			exit(0);
 		}
 	}
+	if (pid == 0) {exit(0);}
 
 	return processes;
 }
