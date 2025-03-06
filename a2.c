@@ -618,8 +618,9 @@ PROCESS* getProcess(int pid) {
 
 }
 
-int getAllProcesses(PROCESS** processArr) {
-	int processCount = 0;
+PROCESS** getAllProcesses(int* processCount) {
+
+	PROCESS** processes = malloc(sizeof(PROCESS*));
 
 	DIR* dir = opendir("/proc");
 	if (dir == NULL) {
@@ -628,15 +629,19 @@ int getAllProcesses(PROCESS** processArr) {
 	}
 
 	skip(dir);
-	DIRECTORYINFO directoryInfo = readdir(dir);
-	for (int i = 0; directoryInfo != NULL; i++) {
+	*processCount = 0;
+
+	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
 		int pid = strtol(directoryInfo->d_name, NULL, 10);
 		if (isValidProcess(pid)) {
-			processArr[i] = getProcess(pid);
+			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
+			processes[*processCount] = getProcess(pid);
 		}
-		directoryInfo = readdir(dir);
-		processCount++;
+		(*processCount)++;
 	}
+
+	processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
+	processes[*processCount] = NULL;
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
@@ -644,15 +649,15 @@ int getAllProcesses(PROCESS** processArr) {
 		exit(1);
 	}
 
-	return processCount;
+	return processes;
 }
 
 
 
 void display(DISPLAYINFO* displayInfo) {
 
-	PROCESS** allProcesses;
-	int processCount = getAllProcesses(allProcesses);
+	int processCount;
+	PROCESS** allProcesses = getAllProcesses(&processCount);
 
 	if (displayInfo->pid == ALLPID) {
 		if (displayInfo->isSummary) {displaySummary(allProcesses, processCount);}
@@ -771,6 +776,22 @@ void wait_ms(int tdelay) {
   	while ((clock() - start_time) * 1000 / CLOCKS_PER_SEC < tdelay/1000000);
 }
 
+PROCESS** getprocessesTEST() {
+	PROCESS** processes = malloc(10*sizeof(PROCESS*));
+
+	int pid = fork();
+	processes[0] = createPROCESS(pid);
+
+	for (int i = 1; i < 10; i++) {
+		if (pid != 0) {
+			pid = fork();
+			processes[i] = createPROCESS(pid);
+		}
+	}
+
+	return processes;
+}
+
 
 int main() {
 
@@ -779,6 +800,7 @@ int main() {
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
 
+		/*
 		
 		displayProcessFD(&process, 1);
 		displaySystemWide(&process, 1);
@@ -786,6 +808,11 @@ int main() {
 		displayComposite(&process, 1);
 		writeCompositeTXT(&process, 1);
 		writeCompositeBIN(&process, 1);
+
+		*/
+
+		PROCESS** processes = getprocessesTEST();
+		displayComposite(processes, 10);
 	
 
 
