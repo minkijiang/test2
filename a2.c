@@ -784,7 +784,9 @@ int main() {
 		writeCompositeBIN(&process, 1);
 		*/
 
-		getDistinctFiles(process);
+		//getDistinctFiles(process);
+
+		getDistinctFDs(process);
 
 	
 
