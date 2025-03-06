@@ -633,7 +633,7 @@ PROCESS* getProcess(int pid) {
 void test2() {
 	DIR* dir = opendir("/proc");
 	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
-		printf("%s \n", directoryInfo->d_name);
+		printf("%s\n", directoryInfo->d_name);
 	}
 	closedir(dir);
 }
