@@ -586,8 +586,6 @@ PROCESS* getProcess(int pid) {
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
 
-	printf("\n %d", pid);
-
 	for (int i = 0; i < process->fdCount; i++) {
 
 		int fd = strtol(directoryInfo->d_name, NULL, 10);
@@ -664,7 +662,7 @@ PROCESS** getAllProcesses(int* processCount) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
 			//getProcess(pid);
-			//printf("%s \n", directoryInfo->d_name);
+			printf("%s \n", directoryInfo->d_name);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
@@ -863,13 +861,11 @@ int main() {
 
 		
 
-		//int n;
-		//PROCESS** processes2 = getAllProcesses(&n);
+		int n;
+		PROCESS** processes2 = getAllProcesses(&n);
 
 		//printf("\n\n %d.    %d\n ", pid, pid2);
 		//displaySummary(processes2, n);
-
-		test2();
 
 
 	
