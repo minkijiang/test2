@@ -649,11 +649,10 @@ PROCESS** getAllProcesses(int* processCount) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
 			//getProcess(pid);
-			printf("%d\n", pid);
+			printf("%s\n", directoryInfo->d_name);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
-		
 	}
 
 	printf("\n\n");
