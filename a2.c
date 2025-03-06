@@ -590,6 +590,8 @@ PROCESS* getProcess(int pid) {
 
 		int fd = strtol(directoryInfo->d_name, NULL, 10);
 
+		/*
+
 		char target[MAXLENGTH];
 
 		char link[MAXLENGTH];
@@ -614,6 +616,10 @@ PROCESS* getProcess(int pid) {
 
 		process->FDarr[i] = createFD(fd, target, inode);
 
+		*/
+
+
+
 		directoryInfo = readdir(dir);
 
 	}
@@ -628,46 +634,12 @@ PROCESS* getProcess(int pid) {
 
 }
 
-void test2() {
-	char* s[2];
-
-	DIR* dir = opendir("/proc");
-	DIRECTORYINFO directoryInfo = readdir(dir);
-
-	for (int i = 0; i < 2; i++) {
-		s[i] = directoryInfo->d_name;
-		directoryInfo = readdir(dir);
-	}
-	//printf("%s\n", s[0]);
-	closedir(dir);
-}
 
 PROCESS** getAllProcesses(int* processCount) {
 
 	PROCESS** processes = malloc(sizeof(PROCESS*));
 
 	DIR* dir = opendir("/proc");
-	if (dir == NULL) {
-		fprintf(stderr, "failed to read proc directory\n");
-		exit(1);
-	}
-
-	skip(dir);
-	*processCount = 0;
-
-	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
-		int pid = strtol(directoryInfo->d_name, NULL, 10);
-		if (isValidProcess(pid)) {
-			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
-			//processes[*processCount] = getProcess(pid);
-			//getProcess(pid);
-			printf("%s \n", directoryInfo->d_name);
-			processes[*processCount] = NULL;
-			(*processCount)++;
-		}
-	}
-
-	dir = opendir("/proc");
 	if (dir == NULL) {
 		fprintf(stderr, "failed to read proc directory\n");
 		exit(1);
@@ -861,10 +833,11 @@ int main() {
 	if (pid != 0 && pid2 != 0) {
 
 		
-
+		/*
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
+		*/
 
 		/*
 
