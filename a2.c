@@ -813,6 +813,7 @@ int main() {
 
 		PROCESS** processes = getprocessesTEST();
 		//displayComposite(&processes[0], 1);
+		printf("%d\n", processes[0]->fdCount);
 	
 
 
