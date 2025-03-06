@@ -568,6 +568,8 @@ PROCESS* getProcess(int pid) {
 	strcpy(directoryName, process->processDirectory);
 	strcat(directoryName, "/fd");
 
+	printf("\n %s \n", directoryName);
+
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
 		fprintf(stderr, "failed to read process directory\n");
@@ -610,6 +612,12 @@ PROCESS* getProcess(int pid) {
 
 		directoryInfo = readdir(dir);
 
+	}
+
+	int isClosed = closedir(dir);
+	if (isClosed != 0) {
+		fprintf(stderr, "failed to close process directory\n");
+		exit(1);
 	}
 
 	return process;
@@ -812,6 +820,8 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
+		/*
+
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
@@ -827,6 +837,8 @@ int main() {
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
 
+		*/
+
 		/*
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
@@ -837,8 +849,15 @@ int main() {
 		*/
 
 		//char* processDirectory = getProcessDirectory(pid);
-		char* processDirectory = processes[0]->processDirectory;
+
+		PROCESS* process = getProcess(pid);
+
+		char* processDirectory = getProcessDirectory(pid);
 		strcat(processDirectory, "/fd");
+
+		printf("\n %s \n", processDirectory);
+
+
 
 		DIR* dir = opendir(processDirectory);
 
