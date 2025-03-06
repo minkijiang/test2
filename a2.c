@@ -251,7 +251,8 @@ char** getDistinctFiles(PROCESS* process) {
 	int count = 0;
 	for (int i = 0; i < process->fdCount; i++) {
 		char* file = process->FDarr[i]->file;
-		if (!inStrArray(arr, count, file)) {
+		//!inStrArray(arr, count, file)
+		if (true) {
 			arr = realloc(arr, (count+1)*sizeof(char*));
 			strcpy(arr[count], file);
 			count++;
