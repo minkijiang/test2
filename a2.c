@@ -830,7 +830,7 @@ int main() {
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
 
-		//displayProcessFD(processes, 2);
+		displayProcessFD(processes, 2);
 		//displaySystemWide(processes, 2);
 		//displayVnode(processes, 2);
 		//displayComposite(processes, 2);
