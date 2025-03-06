@@ -575,7 +575,6 @@ PROCESS* getProcess(int pid) {
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
 		fprintf(stderr, "failed to read process directory\n");
-		perror("");
 		exit(1);
 	}
 
@@ -820,7 +819,7 @@ int main() {
 
 		*/
 
-		PROCESS** processes = getprocessesTEST();
+		//PROCESS** processes = getprocessesTEST();
 		//displayComposite(processes, 10);
 
 		/*
@@ -828,6 +827,9 @@ int main() {
 			printf("%d\n", processes[i]->fdCount);
 		}
 		*/
+
+		int num;
+		getAllProcesses(&num);
 		
 
 		//printf("hi");
