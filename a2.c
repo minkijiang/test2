@@ -874,7 +874,7 @@ int main() {
 
 	}
 	else {
-		wait_ms(4000000);
+		wait_ms(8000000);
 	}
 
 	//TODO: remove duplicates
