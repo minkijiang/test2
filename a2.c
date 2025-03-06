@@ -254,6 +254,7 @@ char** getDistinctFiles(PROCESS* process) {
 		strcpy(file, process->FDarr[i]->file);
 		if (!inStrArray(arr, count, file)) {
 			arr = realloc(arr, (count+1)*sizeof(char*));
+			arr[count] = malloc(MAXLENGTH*sizeof(char));
 			strcpy(arr[count], file);
 			count++;
 		}
@@ -333,6 +334,9 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 		char** files = getDistinctFiles(process);
 		for (int k = 0; files[k] != NULL; k++) {
 			printf("%d   %s\n", process->pid, files[k]);
+		}
+		for (int k = 0; files[k] != NULL; k++) {
+			free(files[k]);
 		}
 		free(files);
 	}
@@ -775,18 +779,15 @@ int main() {
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
 
-		/*
+		
 		displayProcessFD(&process, 1);
 		displaySystemWide(&process, 1);
 		displayVnode(&process, 1);
 		displayComposite(&process, 1);
 		writeCompositeTXT(&process, 1);
 		writeCompositeBIN(&process, 1);
-		*/
+	
 
-		//getDistinctFiles(process);
-
-		getDistinctFDs(process);
 
 	
 
