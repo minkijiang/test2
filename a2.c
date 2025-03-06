@@ -792,7 +792,10 @@ PROCESS** getprocessesTEST() {
 			exit(0);
 		}
 	}
-	if (pid == 0) {exit(0);}
+	if (pid == 0) {
+		wait_ms(2000000);
+		exit(0);
+	}
 
 	return processes;
 }
@@ -817,7 +820,8 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		displayComposite(&processes[0], 1);
+		//displayComposite(processes, 10);
+		printf("hi");
 	
 
 
