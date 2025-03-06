@@ -820,7 +820,7 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
-		/*
+		
 
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
@@ -837,32 +837,18 @@ int main() {
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
 
-		*/
+		
 
-		/*
+		
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
 		}
 		else {
 			printf("not valid process\n");
 		}
-		*/
+		
 
-		//char* processDirectory = getProcessDirectory(pid);
-
-		PROCESS* process = getProcess(pid);
-
-		char* processDirectory = getProcessDirectory(pid);
-		strcat(processDirectory, "/fd");
-
-		printf("\n %s \n", processDirectory);
-
-
-
-		DIR* dir = opendir(processDirectory);
-
-		if (dir == NULL) {printf("cannot open\n");}
-		else {printf("can  open\n");}
+	
 		
 
 	}
