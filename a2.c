@@ -857,8 +857,8 @@ int main() {
 
 		
 
-		int n;
-		PROCESS** processes2 = getAllProcesses(&n);
+		//int n;
+		//PROCESS** processes2 = getAllProcesses(&n);
 
 		//printf("\n\n %d.    %d\n ", pid, pid2);
 		//displaySummary(processes2, n);
