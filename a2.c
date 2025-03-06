@@ -773,12 +773,17 @@ int main() {
 
 	if (pid != 0) {
 		PROCESS* process = getProcess(pid);
+
+		/*
 		displayProcessFD(&process, 1);
 		displaySystemWide(&process, 1);
 		displayVnode(&process, 1);
 		displayComposite(&process, 1);
 		writeCompositeTXT(&process, 1);
 		writeCompositeBIN(&process, 1);
+		*/
+
+		getDistinctFiles(process);
 
 	
 
