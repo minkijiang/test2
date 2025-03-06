@@ -588,7 +588,9 @@ PROCESS* getProcess(int pid) {
 
 	for (int i = 0; i < process->fdCount; i++) {
 
-		int fd = strtol(directoryInfo->d_name, NULL, 10);
+		//int fd = strtol(directoryInfo->d_name, NULL, 10);
+
+		printf("%s", directoryInfo->d_name);
 
 		/*
 
