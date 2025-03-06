@@ -845,8 +845,19 @@ int main() {
 
 		*/
 
+		char* processDirectory = getProcessDirectory(pid);
+		strcat(processDirectory, "/fd");
+
+		DIR* dir = opendir(processDirectory);
+
+		if (dir != NULL) {
+			printf("valid process\n");
+		}
+		else {
+			printf("not valid process\n");
+		}
 		
-		
+		/*
 		
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
@@ -854,6 +865,8 @@ int main() {
 		else {
 			printf("not valid process\n");
 		}
+
+		*/
 
 		
 		
