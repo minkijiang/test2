@@ -825,7 +825,8 @@ int main() {
 		*/
 
 		int num;
-		getAllProcesses(&num);
+		PROCESS** processes = getAllProcesses(&num);
+		displaySummary(processes, num);
 		
 
 		//printf("hi");
