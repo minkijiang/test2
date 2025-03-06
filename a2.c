@@ -837,12 +837,16 @@ int main() {
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
 
+		/*
+
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
 
+		*/
+
 		
-		/*
+		
 		
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
@@ -851,7 +855,7 @@ int main() {
 			printf("not valid process\n");
 		}
 
-		*/
+		
 		
 
 	
