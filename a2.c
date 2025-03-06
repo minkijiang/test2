@@ -586,7 +586,7 @@ PROCESS* getProcess(int pid) {
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
 
-	printf("\n");
+	printf("\n %s", directoryName);
 
 	for (int i = 0; i < process->fdCount; i++) {
 
@@ -655,7 +655,6 @@ PROCESS** getAllProcesses(int* processCount) {
 			//processes[*processCount] = getProcess(pid);
 			getProcess(pid);
 			processes[*processCount] = NULL;
-			printf("%d  ", pid);
 			(*processCount)++;
 		}
 		
