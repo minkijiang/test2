@@ -591,10 +591,12 @@ PROCESS* getProcess(int pid) {
 		strcat(link, "/");
 		strcat(link, directoryInfo->d_name);
 
-		if (readlink(link, target, (MAXLENGTH-1)*sizeof(char)) == -1) {
+		int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
+		if (targetLength == -1) {
 			fprintf(stderr, "failed to read fd\n");
 			exit(1);
 		}
+		target[targetLength] = '\0';
 
 		struct stat fileStat;
 		if (stat(link, &fileStat) == -1) {
