@@ -824,7 +824,7 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
-		/*
+		
 
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
@@ -837,7 +837,7 @@ int main() {
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
 
-		*/
+		
 
 
 
