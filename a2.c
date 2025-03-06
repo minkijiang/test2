@@ -770,6 +770,8 @@ void wait_ms(int tdelay) {
   	while ((clock() - start_time) * 1000 / CLOCKS_PER_SEC < tdelay/1000000);
 }
 
+/*
+
 PROCESS** getprocessesTEST() {
 	PROCESS** processes = malloc(10*sizeof(PROCESS*));
 
@@ -794,44 +796,30 @@ PROCESS** getprocessesTEST() {
 	return processes;
 }
 
+*/
+
 
 int main() {
 
 	int pid = fork();
 
+	int pid2 = 0;
 	if (pid != 0) {
-		PROCESS* process = getProcess(pid);
+		int pid2 = fork();
+	}
 
-		/*
+	if (pid != 0 && pid2 != 0) {
+
+		PROCESS* processes[2];
+		processes[0] = getProcess(pid);
+		processes[1] = getProcess(pid2);
 		
-		displayProcessFD(&process, 1);
-		displaySystemWide(&process, 1);
-		displayVnode(&process, 1);
-		displayComposite(&process, 1);
-		writeCompositeTXT(&process, 1);
-		writeCompositeBIN(&process, 1);
-
-		*/
-
-		//PROCESS** processes = getprocessesTEST();
-		//displayComposite(processes, 10);
-
-		/*
-		for (int i = 0; i < 10; i++) {
-			printf("%d\n", processes[i]->fdCount);
-		}
-		*/
-
-		int num;
-		PROCESS** processes = getAllProcesses(&num);
-		displaySummary(processes, num);
-		
-
-		//printf("hi");
-	
-
-
-	
+		displayProcessFD(processes, 2);
+		displaySystemWide(processes, 2);
+		displayVnode(processes, 2);
+		displayComposite(processes, 2);
+		writeCompositeTXT(processes, 2);
+		writeCompositeBIN(processes, 2);
 
 	}
 	else {
