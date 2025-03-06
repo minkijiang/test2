@@ -630,6 +630,14 @@ PROCESS* getProcess(int pid) {
 
 }
 
+void test() {
+	DIR* dir = opendir("/proc");
+	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
+		printf("%s \n", directoryInfo->d_name);
+	}
+	closedir(dir);
+}
+
 PROCESS** getAllProcesses(int* processCount) {
 
 	PROCESS** processes = malloc(sizeof(PROCESS*));
@@ -649,33 +657,10 @@ PROCESS** getAllProcesses(int* processCount) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
 			//getProcess(pid);
-			printf("%s.      hi \n", directoryInfo->d_name);
+			printf("%s \n", directoryInfo->d_name);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
-	}
-
-	printf("\n\n");
-
-	dir = opendir("/proc");
-	if (dir == NULL) {
-		fprintf(stderr, "failed to read proc directory\n");
-		exit(1);
-	}
-
-	skip(dir);
-	*processCount = 0;
-
-	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
-		int pid = strtol(directoryInfo->d_name, NULL, 10);
-		if (isValidProcess(pid)) {
-			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
-			//processes[*processCount] = getProcess(pid);
-			getProcess(pid);
-			processes[*processCount] = NULL;
-			(*processCount)++;
-		}
-		
 	}
 
 	int isClosed = closedir(dir);
@@ -871,13 +856,13 @@ int main() {
 
 		
 
-		int n;
-		PROCESS** processes2 = getAllProcesses(&n);
+		//int n;
+		//PROCESS** processes2 = getAllProcesses(&n);
 
-		printf("\n\n %d.    %d\n ", pid, pid2);
+		//printf("\n\n %d.    %d\n ", pid, pid2);
 		//displaySummary(processes2, n);
 
-
+		test();
 
 
 	
