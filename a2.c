@@ -588,7 +588,7 @@ PROCESS* getProcess(int pid) {
 
 	for (int i = 0; i < process->fdCount; i++) {
 
-		int fd = strtol(directoryInfo->d_name, NULL, 10);
+		//int fd = strtol(directoryInfo->d_name, NULL, 10);
 
 		/*
 
@@ -653,7 +653,7 @@ PROCESS** getAllProcesses(int* processCount) {
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
-			//getProcess(pid);
+			getProcess(pid);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
