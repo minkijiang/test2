@@ -823,8 +823,9 @@ int main() {
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
 
-		displaySummary(processes, 2);
-		displayOffending(processes, 2, 10);
+		int n;
+		PROCESS** processes2 = getAllProcesses(&n);
+		displaySummary(processes2, n);
 		
 
 	}
