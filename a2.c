@@ -820,8 +820,8 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		//displayComposite(processes, 10);
-		printf("hi");
+		displayComposite(processes, 10);
+		//printf("hi");
 	
 
 
