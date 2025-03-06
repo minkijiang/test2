@@ -805,7 +805,7 @@ int main() {
 
 	int pid2 = 0;
 	if (pid != 0) {
-		int pid2 = fork();
+		pid2 = fork();
 	}
 
 	if (pid != 0 && pid2 != 0) {
@@ -813,13 +813,17 @@ int main() {
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
+
+		displayComposite(processes, 2);
 		
+		/*
 		displayProcessFD(processes, 2);
 		displaySystemWide(processes, 2);
 		displayVnode(processes, 2);
 		displayComposite(processes, 2);
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
+		*/
 
 	}
 	else {
