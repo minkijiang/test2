@@ -821,7 +821,11 @@ int main() {
 
 		PROCESS** processes = getprocessesTEST();
 		//displayComposite(processes, 10);
-		printf("%d", processes[0]->fdCount);
+		for (int i = 0; i < 10; i++) {
+			printf("%d", processes[i]->fdCount);
+		}
+		
+
 		//printf("hi");
 	
 
