@@ -842,13 +842,13 @@ int main() {
 
 
 
-		/*
+		
 
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
 
-		*/
+		/*
 
 		char* processDirectory = getProcessDirectory(pid);
 		strcat(processDirectory, "/fd");
@@ -864,6 +864,8 @@ int main() {
 		else {
 			printf("not valid process\n");
 		}
+
+		*/
 
 		
 
