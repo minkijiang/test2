@@ -667,6 +667,26 @@ PROCESS** getAllProcesses(int* processCount) {
 		}
 	}
 
+	dir = opendir("/proc");
+	if (dir == NULL) {
+		fprintf(stderr, "failed to read proc directory\n");
+		exit(1);
+	}
+
+	skip(dir);
+	*processCount = 0;
+
+	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
+		int pid = strtol(directoryInfo->d_name, NULL, 10);
+		if (isValidProcess(pid)) {
+			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
+			//processes[*processCount] = getProcess(pid);
+			getProcess(pid);
+			processes[*processCount] = NULL;
+			(*processCount)++;
+		}
+	}
+
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
 		fprintf(stderr, "failed to close process directory\n");
