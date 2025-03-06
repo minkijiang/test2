@@ -630,7 +630,7 @@ PROCESS* getProcess(int pid) {
 
 }
 
-void test() {
+void test2() {
 	DIR* dir = opendir("/proc");
 	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
 		printf("%s \n", directoryInfo->d_name);
@@ -862,7 +862,7 @@ int main() {
 		//printf("\n\n %d.    %d\n ", pid, pid2);
 		//displaySummary(processes2, n);
 
-		test();
+		test2();
 
 
 	
