@@ -179,14 +179,10 @@ bool isValidProcess(int pid) {
 	DIR* dir = opendir(processDirectory);
 	free(processDirectory);
 
-	if (dir == NULL && errno == ENOENT) {
-		int isClosed = closedir(dir);
-		if (isClosed != 0) { 
-			fprintf(stderr, "Error: failed to close process file\n");
-			exit(1);
-		}
-
-		return false;
+	if (dir == NULL && errno == ENOENT) {return false;}
+	else if (dir == NULL) {
+		fprintf(stderr, "Error: couldn't open process file\n");
+		exit(1);
 	}
 
 	int isClosed = closedir(dir);
