@@ -836,7 +836,8 @@ int main() {
 		}
 		*/
 
-		char* processDirectory = getProcessDirectory(pid);
+		//char* processDirectory = getProcessDirectory(pid);
+		char* processDirectory = processes[0]->processDirectory;
 		strcat(processDirectory, "/fd");
 
 		DIR* dir = opendir(processDirectory);
