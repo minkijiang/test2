@@ -580,12 +580,10 @@ PROCESS* getProcess(int pid) {
 		exit(1);
 	}
 
-	printf("\n%s\n", directoryName);
-
-	return NULL;
-
 	process->fdCount = getFdCount(pid);
 	process->FDarr = malloc((process->fdCount)*sizeof(FD));
+
+	return NULL;
 
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
