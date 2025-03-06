@@ -614,12 +614,7 @@ PROCESS* getProcess(int pid) {
 
 		long long int inode = (long long int)fileStat.st_ino;
 
-		process->FDarr[i] = createFD(fd, target, inode);
-
-		if (i < 4) {
-			printf("    %s   ", target);
-		}
-		
+		//process->FDarr[i] = createFD(fd, target, inode);
 
 		directoryInfo = readdir(dir);
 
