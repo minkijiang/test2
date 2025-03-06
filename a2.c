@@ -583,11 +583,10 @@ PROCESS* getProcess(int pid) {
 	process->fdCount = getFdCount(pid);
 	process->FDarr = malloc((process->fdCount)*sizeof(FD));
 
-	printf("\n %d\n ", process->fdCount);
-	return NULL;
-
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
+
+	printf("\n");
 
 	for (int i = 0; i < process->fdCount; i++) {
 
@@ -616,6 +615,8 @@ PROCESS* getProcess(int pid) {
 		long long int inode = (long long int)fileStat.st_ino;
 
 		process->FDarr[i] = createFD(fd, target, inode);
+
+		printf(".    %s   ", target);
 
 		directoryInfo = readdir(dir);
 
