@@ -824,7 +824,7 @@ int main() {
 		writeCompositeBIN(processes, 2);
 
 		displaySummary(processes, 2);
-		displayOffending(processes, 2, 1);
+		displayOffending(processes, 2, 10);
 		
 
 	}
