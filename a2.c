@@ -60,12 +60,12 @@ char* getProcessDirectory(int pid) {
 	char pid_str[MAXLENGTH];
 	sprintf(pid_str, "%d", pid);
 
-	char* directoryName = malloc((MAXLENGTH-1)*sizeof(char));
+	char* directoryName = malloc(MAXLENGTH*sizeof(char));
 	if (directoryName == NULL) {
 		fprintf(stderr, "Error: failed to malloc\n");
 		exit(1);
 	}
-
+	directoryName[0] = '\0';
 	strcat(directoryName, "/proc/");
 	strcat(directoryName, pid_str);
 
