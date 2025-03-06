@@ -509,7 +509,7 @@ void displaySummary(PROCESS** processes, int numProcess) {
 	printf("Summary Table\n");
 	printf("=============\n");
 
-	for (int i = 0; i< numProcess; i++) {
+	for (int i = 0; i < numProcess; i++) {
 		int pid = processes[i]->pid;
 		int fdCount = processes[i]->fdCount;
 		printf("%d : %d FD\n", pid, fdCount);
@@ -632,12 +632,10 @@ PROCESS** getAllProcesses(int* processCount) {
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			processes[*processCount] = getProcess(pid);
+			(*processCount)++;
 		}
-		(*processCount)++;
+		
 	}
-
-	processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
-	processes[*processCount] = NULL;
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
