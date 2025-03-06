@@ -850,6 +850,7 @@ int main() {
 
 		DIR* dir = opendir(processDirectory);
 
+		printf("%s\n", processDirectory);
 		if (dir != NULL) {
 			printf("valid process\n");
 		}
