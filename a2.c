@@ -568,8 +568,6 @@ PROCESS* getProcess(int pid) {
 	strcpy(directoryName, process->processDirectory);
 	strcat(directoryName, "/fd");
 
-	printf("\n %s \n", directoryName);
-
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
 		fprintf(stderr, "failed to read process directory\n");
@@ -838,7 +836,7 @@ int main() {
 		displaySummary(processes2, n);
 
 		
-
+		/*
 		
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
@@ -846,6 +844,8 @@ int main() {
 		else {
 			printf("not valid process\n");
 		}
+
+		*/
 		
 
 	
