@@ -780,12 +780,12 @@ PROCESS** getprocessesTEST() {
 	PROCESS** processes = malloc(10*sizeof(PROCESS*));
 
 	int pid = fork();
-	processes[0] = createPROCESS(pid);
+	processes[0] = getProcess(pid);
 
 	for (int i = 1; i < 10; i++) {
 		if (pid != 0) {
 			pid = fork();
-			processes[i] = createPROCESS(pid);
+			processes[i] = getProcess(pid);
 		}
 		else {
 			wait_ms(2000000);
@@ -820,10 +820,13 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		//displayComposite(processes, 10);
+		displayComposite(processes, 10);
+
+		/*
 		for (int i = 0; i < 10; i++) {
-			printf("%d", processes[i]->fdCount);
+			printf("%d\n", processes[i]->fdCount);
 		}
+		*/
 		
 
 		//printf("hi");
