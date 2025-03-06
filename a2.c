@@ -835,7 +835,7 @@ int main() {
 		displayVnode(processes, 2);
 		displayComposite(processes, 2);
 		writeCompositeTXT(processes, 2);
-		//writeCompositeBIN(processes, 2);
+		writeCompositeBIN(processes, 2);
 
 		
 
