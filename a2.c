@@ -645,7 +645,8 @@ PROCESS** getAllProcesses(int* processCount) {
 		int pid = strtol(directoryInfo->d_name, NULL, 10);
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
-			processes[*processCount] = getProcess(pid);
+			//processes[*processCount] = getProcess(pid);
+			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
 		
