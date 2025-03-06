@@ -198,6 +198,89 @@ bool isValidProcess(int pid) {
 	return true;
 }
 
+bool inIntArray(int* arr, int size, int num) {
+	if (size == 0) {return false;}
+	for (int i = 0; i < size; i++) {
+		if (arr[i] == num) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool inLLDArray(long long int* arr, int size, int num) {
+	if (size == 0) {return false;}
+	for (int i = 0; i < size; i++) {
+		if (arr[i] == num) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool inStrArray(char** arr, int size, char* word) {
+	if (size == 0) {return false;}
+	for (int i = 0; i < size; i++) {
+		if (strcmp(arr[i], word) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int* getDistinctFDs(PROCESS* process) {
+	int* arr = malloc(sizeof(int));
+
+	int count = 0;
+	for (int i = 0; i < process->fdCount; i++) {
+		int fd = process->FDarr[i]->fd;
+		if (!inIntArray(arr, count, fd)) {
+			arr = realloc(arr, (count+1)*sizeof(int));
+			arr[count] = fd;
+			count++;
+		}
+	}
+	arr = realloc(arr, (count+1)*sizeof(int));
+	arr[count] = END;
+	return arr;
+}
+
+char** getDistinctFiles(PROCESS* process) {
+	char** arr = malloc(sizeof(char*));
+
+	int count = 0;
+	for (int i = 0; i < process->fdCount; i++) {
+		char* file = process->FDarr[i]->file;
+		if (!inStrArray(arr, count, file)) {
+			arr = realloc(arr, (count+1)*sizeof(int));
+			strcpy(arr[count], file);
+			count++;
+		}
+	}
+
+	arr = realloc(arr, (count+1)*sizeof(int));
+	arr[count] = NULL;
+
+	return arr;
+}
+
+long long int* getDistinctInodes(PROCESS* process) {
+	long long int* arr = malloc(sizeof(long long int));
+
+	int count = 0;
+	for (int i = 0; i < process->fdCount; i++) {
+		int inode = process->FDarr[i]->inode;
+		if (!inLLDArray(arr, count, inode)) {
+			arr = realloc(arr, (count+1)*sizeof(long long int));
+			arr[count] = inode;
+			count++;
+		}
+	}
+	arr = realloc(arr, (count+1)*sizeof(long long int));
+	arr[count] = END;
+	return arr;
+}
+
 void displayProcessFD(PROCESS** processes, int processCount) {
 	
 	printf("\n\n");
@@ -214,10 +297,11 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
-		for (int k = 0; k < process->fdCount; k++) {
-			int fd = process->FDarr[k]->fd;
-			printf("%d   %d\n", process->pid, fd);
+		int* fds = getDistinctFDs(process);
+		for (int k = 0; fds[k] != END; k++) {
+			printf("%d   %d\n", process->pid, fds[k]);
 		}
+		free(fds);
 	}
 
 	for (int i = 0; i < lengths[0]+lengths[1]+strlen("PID")+strlen("FD"); i++) {
@@ -226,6 +310,7 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 	printf("\n");
 
 	free(lengths);
+
 }
 
 void displaySystemWide(PROCESS** processes, int processCount) {
@@ -244,10 +329,11 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
-		for (int k = 0; k < process->fdCount; k++) {
-			char* file = process->FDarr[k]->file;
-			printf("%d   %s\n", process->pid, file);
+		char** files = getDistinctFiles(process);
+		for (int k = 0; files[k] != NULL; k++) {
+			printf("%d   %s\n", process->pid, files[k]);
 		}
+		free(files);
 	}
 
 	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
@@ -274,10 +360,11 @@ void displayVnode(PROCESS** processes, int processCount) {
 
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
-		for (int k = 0; k < process->fdCount; k++) {
-			long long int inode = process->FDarr[k]->inode;
-			printf("%d   %lld\n", process->pid, inode);
+		long long int* inodes = getDistinctInodes(process);
+		for (int k = 0; inodes[k] != END; k++) {
+			printf("%d   %lld\n", process->pid, inodes[k]);
 		}
+		free(inodes);
 	}
 
 
