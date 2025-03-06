@@ -826,9 +826,9 @@ int main() {
 
 		
 
-		//PROCESS* processes[2];
-		//processes[0] = getProcess(pid);
-		//processes[1] = getProcess(pid2);
+		PROCESS* processes[2];
+		processes[0] = getProcess(pid);
+		processes[1] = getProcess(pid2);
 
 		//displayProcessFD(processes, 2);
 		//displaySystemWide(processes, 2);
@@ -875,7 +875,7 @@ int main() {
 
 	}
 	else {
-		wait_ms(8000000);
+		wait_ms(16000000);
 	}
 
 	//TODO: remove duplicates
