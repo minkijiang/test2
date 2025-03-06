@@ -640,7 +640,7 @@ void test2() {
 		s[i] = directoryInfo->d_name;
 		directoryInfo = readdir(dir);
 	}
-	printf("%s\n", s[0]);
+	//printf("%s\n", s[0]);
 	closedir(dir);
 }
 
