@@ -840,37 +840,12 @@ int main() {
 
 		
 
-
-
-		
-
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
-		displaySummary(processes2, n);
+		//displaySummary(processes2, n);
 
-		/*
 
-		char* processDirectory = getProcessDirectory(pid);
-		strcat(processDirectory, "/fd");
 
-		DIR* dir = opendir(processDirectory);
-
-		printf("%s\n", processDirectory);
-		
-		
-		if (isValidProcess(pid)) {
-			printf("valid process\n");
-		}
-		else {
-			printf("not valid process\n");
-		}
-
-		*/
-
-		
-
-		
-		
 
 	
 		
