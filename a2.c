@@ -815,6 +815,8 @@ int main() {
 		processes[1] = getProcess(pid2);
 
 		displayComposite(processes, 2);
+
+		printf("\n%s\n", processes[0]->FDarr[0]->file);
 		
 		/*
 		displayProcessFD(processes, 2);
