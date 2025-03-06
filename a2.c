@@ -822,6 +822,8 @@ int main() {
 		displayComposite(processes, 2);
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
+
+		displaySummary(processes, 2);
 		
 
 	}
