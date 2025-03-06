@@ -812,7 +812,7 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		displayComposite(&processes[0], 1);
+		//displayComposite(&processes[0], 1);
 	
 
 
