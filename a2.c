@@ -637,8 +637,8 @@ void test2() {
 	DIRECTORYINFO directoryInfo = readdir(dir);
 
 	for (int i = 0; i < 2; i++) {
-		s[i] = dir->d_name;
-		directoryInfo = readdir(dir)
+		s[i] = directoryInfo->d_name;
+		directoryInfo = readdir(dir);
 	}
 	printf("%s\n", s[0]);
 	closedir(dir);
