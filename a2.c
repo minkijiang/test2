@@ -824,7 +824,7 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
-		
+		/*
 
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
@@ -836,6 +836,8 @@ int main() {
 		displayComposite(processes, 2);
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
+
+		*/
 
 		/*
 
@@ -851,11 +853,12 @@ int main() {
 		DIR* dir = opendir(processDirectory);
 
 		printf("%s\n", processDirectory);
+
 		if (dir != NULL) {
-			printf("valid process\n");
+			printf("can open\n");
 		}
 		else {
-			printf("not valid process\n");
+			printf("can't\n");
 		}
 		
 		/*
