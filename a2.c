@@ -646,14 +646,9 @@ PROCESS** getAllProcesses(int* processCount) {
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
+			getProcess(pid);
 			processes[*processCount] = NULL;
 			printf("%d  ", pid);
-			if (isValidProcess(pid)) {
-				printf("true\n");
-			}
-			else {
-				printf("false\n");
-			}
 			(*processCount)++;
 		}
 		
