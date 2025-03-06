@@ -820,7 +820,7 @@ int main() {
 		*/
 
 		PROCESS** processes = getprocessesTEST();
-		displayComposite(processes, 10);
+		//displayComposite(processes, 10);
 
 		/*
 		for (int i = 0; i < 10; i++) {
