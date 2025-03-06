@@ -634,7 +634,7 @@ void test2() {
 	char* s[2];
 
 	DIR* dir = opendir("/proc");
-	DIRECTORYINFO directoryInfo = readdir(dir)
+	DIRECTORYINFO directoryInfo = readdir(dir);
 
 	for (int i = 0; i < 2; i++) {
 		s[i] = dir->d_name;
