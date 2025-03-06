@@ -657,7 +657,6 @@ PROCESS** getAllProcesses(int* processCount) {
 
 	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
 		int pid = strtol(directoryInfo->d_name, NULL, 10);
-		printf("%s \n", directoryInfo->d_name);
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
