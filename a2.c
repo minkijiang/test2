@@ -826,6 +826,13 @@ int main() {
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
+
+		if (isValidProcess(pid)) {
+			printf("valid process\n");
+		}
+		else {
+			printf("not valid process\n");
+		}
 		
 
 	}
