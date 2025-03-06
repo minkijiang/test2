@@ -583,6 +583,7 @@ PROCESS* getProcess(int pid) {
 	process->fdCount = getFdCount(pid);
 	process->FDarr = malloc((process->fdCount)*sizeof(FD));
 
+	printf("\n %d\n ", process->fdCount);
 	return NULL;
 
 	skip(dir);
