@@ -827,17 +827,27 @@ int main() {
 		PROCESS** processes2 = getAllProcesses(&n);
 		displaySummary(processes2, n);
 
+		/*
 		if (isValidProcess(pid)) {
 			printf("valid process\n");
 		}
 		else {
 			printf("not valid process\n");
 		}
+		*/
+
+		char* processDirectory = getProcessDirectory(pid);
+		strcat(processDirectory, "/fd");
+
+		DIR* dir = opendir(processDirectory);
+
+		if (dir == NULL) {printf("cannot open\n");}
+		else {printf("can  open\n");}
 		
 
 	}
 	else {
-		wait_ms(2000000);
+		wait_ms(4000000);
 	}
 
 	//TODO: remove duplicates
