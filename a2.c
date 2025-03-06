@@ -586,7 +586,7 @@ PROCESS* getProcess(int pid) {
 	skip(dir);
 	DIRECTORYINFO directoryInfo = readdir(dir);
 
-	printf("\n %s", directoryName);
+	printf("\n %d", pid);
 
 	for (int i = 0; i < process->fdCount; i++) {
 
@@ -614,7 +614,7 @@ PROCESS* getProcess(int pid) {
 
 		long long int inode = (long long int)fileStat.st_ino;
 
-		//process->FDarr[i] = createFD(fd, target, inode);
+		process->FDarr[i] = createFD(fd, target, inode);
 
 		directoryInfo = readdir(dir);
 
@@ -649,6 +649,30 @@ PROCESS** getAllProcesses(int* processCount) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
 			getProcess(pid);
+			processes[*processCount] = NULL;
+			(*processCount)++;
+		}
+		
+	}
+
+	printf("\n\n");
+
+	dir = opendir("/proc");
+	if (dir == NULL) {
+		fprintf(stderr, "failed to read proc directory\n");
+		exit(1);
+	}
+
+	skip(dir);
+	*processCount = 0;
+
+	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
+		int pid = strtol(directoryInfo->d_name, NULL, 10);
+		if (isValidProcess(pid)) {
+			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
+			//processes[*processCount] = getProcess(pid);
+			//getProcess(pid);
+			printf("%d\n", pid);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
