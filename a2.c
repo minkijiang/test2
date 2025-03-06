@@ -62,7 +62,7 @@ char* getProcessDirectory(int pid) {
 
 	char* directoryName = malloc((MAXLENGTH-1)*sizeof(char));
 	if (directoryName == NULL) {
-		fprintf(stderr, "Error: failed to malloc");
+		fprintf(stderr, "Error: failed to malloc\n");
 		exit(1);
 	}
 
@@ -110,7 +110,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 FD* createFD(int fd, char file[MAXLENGTH], int inode) {
 	FD* newFD = malloc(sizeof(FD));
 	if (newFD == NULL) {
-		fprintf(stderr, "Error: failed to malloc");
+		fprintf(stderr, "Error: failed to malloc\n");
 		exit(1);
 	}
 
@@ -124,7 +124,7 @@ FD* createFD(int fd, char file[MAXLENGTH], int inode) {
 PROCESS* createPROCESS(int pid) {
 	PROCESS* newProcess = malloc(sizeof(PROCESS));
 	if (newProcess == NULL) {
-		fprintf(stderr, "Error: failed to malloc");
+		fprintf(stderr, "Error: failed to malloc\n");
 		exit(1);
 	}
 
@@ -182,7 +182,7 @@ bool isValidProcess(int pid) {
 	if (dir == NULL && errno == ENOENT) {
 		int isClosed = closedir(dir);
 		if (isClosed != 0) { 
-			fprintf(stderr, "Error: failed to close process file");
+			fprintf(stderr, "Error: failed to close process file\n");
 			exit(1);
 		}
 
@@ -191,7 +191,7 @@ bool isValidProcess(int pid) {
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) { 
-		fprintf(stderr, "Error: failed to close process file");
+		fprintf(stderr, "Error: failed to close process file\n");
 		exit(1);
 	}
 
@@ -429,7 +429,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 void writeCompositeTXT(PROCESS** processes,  int processCount) {
 	FILE* file = fopen("compositeTable.txt", "w");
 	if (file == NULL) {
-		fprintf(stderr, "Error: could not write to compositeTable.txt");
+		fprintf(stderr, "Error: could not write to compositeTable.txt\n");
 		exit(1);
 	}
 
@@ -471,7 +471,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 
 	int isClosed = fclose(file);
 	if (isClosed != 0) {
-		fprintf(stderr, "Error: could not close compositeTable.txt");
+		fprintf(stderr, "Error: could not close compositeTable.txt\n");
 		exit(1);
 	}
 }
@@ -480,7 +480,7 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 	FILE* file = fopen("compositeTable.bin", "wb");
 
 	if (file == NULL) {
-		fprintf(stderr, "Error: could not write to compositeTable.bin");
+		fprintf(stderr, "Error: could not write to compositeTable.bin\n");
 		exit(1);
 	}
 
@@ -503,7 +503,7 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 
 	int isClosed = fclose(file);
 	if (isClosed != 0) {
-		fprintf(stderr, "Error: could not close compositeTable.bin");
+		fprintf(stderr, "Error: could not close compositeTable.bin\n");
 		exit(1);
 	}
 }
@@ -542,7 +542,7 @@ int getFdCount(int pid) {
 
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
-		fprintf(stderr, "failed to read process directory");
+		fprintf(stderr, "failed to read process directory\n");
 		exit(1);
 	}
 
@@ -557,7 +557,7 @@ int getFdCount(int pid) {
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory");
+		fprintf(stderr, "failed to close process directory\n");
 		exit(1);
 	}
 
@@ -574,7 +574,8 @@ PROCESS* getProcess(int pid) {
 
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
-		fprintf(stderr, "failed to read process directory");
+		fprintf(stderr, "failed to read process directory\n");
+		perror("");
 		exit(1);
 	}
 
@@ -596,13 +597,13 @@ PROCESS* getProcess(int pid) {
 		strcat(link, directoryInfo->d_name);
 
 		if (readlink(link, target, (MAXLENGTH-1)*sizeof(char)) == -1) {
-			fprintf(stderr, "failed to read fd");
+			fprintf(stderr, "failed to read fd\n");
 			exit(1);
 		}
 
 		struct stat fileStat;
 		if (stat(link, &fileStat) == -1) {
-			fprintf(stderr, "failed to read fd");
+			fprintf(stderr, "failed to read fd\n");
 			exit(1);
 		}
 
@@ -624,7 +625,7 @@ PROCESS** getAllProcesses(int* processCount) {
 
 	DIR* dir = opendir("/proc");
 	if (dir == NULL) {
-		fprintf(stderr, "failed to read proc directory");
+		fprintf(stderr, "failed to read proc directory\n");
 		exit(1);
 	}
 
@@ -645,7 +646,7 @@ PROCESS** getAllProcesses(int* processCount) {
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory");
+		fprintf(stderr, "failed to close process directory\n");
 		exit(1);
 	}
 
