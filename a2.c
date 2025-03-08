@@ -100,10 +100,8 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 
 			if (pidLength > maxPidLength) {maxPidLength = pidLength;}
 			if (fdLength > maxFdLength) {maxFdLength = fdLength;}
-			if (fileLength > maxFdLength) {maxFileLength = fileLength;}
+			if (fileLength > maxFileLength) {maxFileLength = fileLength;}
 			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
-
-			printf("%d.       %d\n", fileLength, maxFileLength);
 		}
 
 		
@@ -372,7 +370,6 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
 		printf("=");
 	}
-	printf("\n%d\n", lengths[2]);
 
 	printf("\n");
 
@@ -856,7 +853,7 @@ void test() {
 
 int main(int argc, char** argv) {
 	
-	/*
+	
 	DISPLAYINFO* displayInfo = processArguments(argc, argv);
 
 	if (isValidProcess(displayInfo->pid)) {
@@ -869,12 +866,7 @@ int main(int argc, char** argv) {
 
 	free(displayInfo);
 
-	*/
-
-	int n;
-	PROCESS** p = getAllProcesses(&n);
-
-	displaySystemWide(p, n);
+	
 
 	
 
