@@ -817,13 +817,11 @@ int main() {
 	if (pid != 0 && pid2 != 0) {
 
 		
-		/*
+		
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
-		*/
-
-		/*
+		
 
 		displayProcessFD(processes, 2);
 		displaySystemWide(processes, 2);
@@ -833,7 +831,7 @@ int main() {
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
 
-		*/
+		
 
 		
 
