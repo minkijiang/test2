@@ -455,7 +455,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 			printf("%s", filename);
 
 			
-			for (long int j = 0; j < lengths[2]+3-(long int)strlen(filename); j++) {
+			for (long int j = 0; j < lengths[2]+3-(int)strlen(filename); j++) {
 				printf(" ");
 			}
 			
@@ -468,6 +468,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
 		printf("=");
 	}
+
 
 	printf("\n");
 
@@ -519,7 +520,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 				fprintf(file, " ");
 			}
 			fprintf(file, "%s", filename);
-			for (int j = 0; j < lengths[2]+3-strlen(filename); j++) {
+			for (int j = 0; j < lengths[2]+3-(int)strlen(filename); j++) {
 				fprintf(file, " ");
 			}
 			fprintf(file, "%lld\n", inode);
@@ -849,7 +850,7 @@ void test() {
 
 int main(int argc, char** argv) {
 	
-
+	/*
 	DISPLAYINFO* displayInfo = processArguments(argc, argv);
 
 	if (isValidProcess(displayInfo->pid)) {
@@ -861,6 +862,13 @@ int main(int argc, char** argv) {
 	}
 
 	free(displayInfo);
+
+	*/
+
+	int n;
+	PROCESS* p = getAllProcesses(&n);
+
+	displaySystemWide(p, n);
 
 	
 
