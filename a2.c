@@ -668,7 +668,7 @@ int getThreshold(char* arg) {
 		arg[11] = '\0';
 	}
 	else {
-		return NOTHING;
+		return -5;
 	}
 
 	if (strcmp(arg, "--threshold") != 0) {
