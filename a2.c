@@ -681,6 +681,8 @@ int getThreshold(char* arg) {
 DISPLAYINFO* processArguments(int argc, char** argv) {
 	DISPLAYINFO* displayInfo = createDISPLAYINFO();
 
+	printf("%s.      %d", getThreshold(argv[1]), argc);
+
 	if (argc == 1) {
 		displayInfo->isComposite = true;
 		displayInfo->pid = ALLPID;
