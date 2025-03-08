@@ -161,9 +161,11 @@ void freeAllPROCESS(PROCESS** processes, int processCount) {
 		for (int k = 0; k < processes[i]->fdCount; k++) {
 			free(processes[i]->FDarr[k]);
 		}
+		free(processes[i]->FDarr);
 		free(processes[i]->processDirectory);
 		free(processes[i]);
 	}
+	free(processes);
 	
 }
 
