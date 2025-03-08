@@ -451,13 +451,13 @@ void displayComposite(PROCESS** processes, int processCount) {
 				printf(" ");
 			}
 
-			/*
+			
 			printf("%s", filename);
 			for (int j = 0; j < lengths[2]+3-strlen(filename); j++) {
 				printf(" ");
 			}
 			printf("%lld\n", inode);
-			*/
+			
 
 		}
 	}
