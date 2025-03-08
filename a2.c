@@ -103,7 +103,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 			if (fileLength > maxFdLength) {maxFileLength = fileLength;}
 			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
 
-			printf("%d\n", fileLength);
+			printf("%d.       %d\n", fileLength, maxFileLength);
 		}
 
 		
