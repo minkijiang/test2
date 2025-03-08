@@ -417,8 +417,6 @@ void displayComposite(PROCESS** processes, int processCount) {
 		}
 	}
 
-
-
 	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
 		printf("=");
 	}
@@ -566,7 +564,7 @@ int getFdCount(int pid) {
 
 }
 
-PROCESS* testprocess(int pid) {
+PROCESS* getProcess(int pid) {
 	PROCESS* process = createPROCESS(pid);
 
 	DIR* dir = opendir(process->processDirectory);
@@ -618,66 +616,7 @@ PROCESS* testprocess(int pid) {
 	}
 
 	return process;
-}
 
-PROCESS* getProcess(int pid) {
-	PROCESS* process = createPROCESS(pid);
-
-	char directoryName[MAXLENGTH];
-	strcpy(directoryName, process->processDirectory);
-	strcat(directoryName, "/fd");
-
-	DIR* dir = opendir(directoryName);
-	if (dir == NULL) {
-		fprintf(stderr, "failed to read process directory\n");
-		exit(1);
-	}
-
-	process->fdCount = getFdCount(pid);
-	process->FDarr = malloc((process->fdCount)*sizeof(FD));
-
-	skip(dir);
-	DIRECTORYINFO directoryInfo = readdir(dir);
-
-	for (int i = 0; i < process->fdCount; i++) {
-
-		int fd = strtol(directoryInfo->d_name, NULL, 10);
-
-		char target[MAXLENGTH];
-
-		char link[MAXLENGTH];
-		strcpy(link, directoryName);
-		strcat(link, "/");
-		strcat(link, directoryInfo->d_name);
-
-		int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
-		if (targetLength == -1) {
-			fprintf(stderr, "failed to read fd\n");
-			exit(1);
-		}
-		target[targetLength] = '\0';
-
-		struct stat fileStat;
-		if (stat(link, &fileStat) == -1) {
-			fprintf(stderr, "failed to read fd\n");
-			exit(1);
-		}
-
-		long long int inode = (long long int)fileStat.st_ino;
-
-		process->FDarr[i] = createFD(fd, target, inode);
-
-		directoryInfo = readdir(dir);
-
-	}
-
-	int isClosed = closedir(dir);
-	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory\n");
-		exit(1);
-	}
-
-	return process;
 
 }
 
@@ -699,9 +638,7 @@ PROCESS** getAllProcesses(int* processCount) {
 		int pid = strtol(directoryInfo->d_name, NULL, 10);
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
-			//processes[*processCount] = getProcess(pid);
-			//getProcess(pid);
-			testprocess(pid);
+			processes[*processCount] = getProcess(pid);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
