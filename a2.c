@@ -718,6 +718,12 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 			else if (getThreshold(argv[i]) != NOTHING) {
 				displayInfo->threshold = getThreshold(argv[i]);
 			}
+			else if (strcmp(argv[i], "--output_TXT") == 0) {
+				displayInfo->outputTXT = true;
+			}
+			else if (strcmp(argv[i], "--output_BIN") == 0) {
+				displayInfo->outputBIN = true;
+			}
 			else {
 				fprintf(stderr, "Error: invalid arguments");
 				exit(1);
