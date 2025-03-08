@@ -444,6 +444,8 @@ void displayComposite(PROCESS** processes, int processCount) {
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				printf(" ");
 			}
+
+			/*
 			printf("%d", fd);
 			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
 				printf(" ");
@@ -453,6 +455,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 				printf(" ");
 			}
 			printf("%lld\n", inode);
+			*/
 
 		}
 	}
