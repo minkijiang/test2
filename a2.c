@@ -165,7 +165,7 @@ void freeAllPROCESS(PROCESS** processes, int processCount) {
 		free(processes[i]->processDirectory);
 		free(processes[i]);
 	}
-	//free(processes);
+	free(processes);
 	
 }
 
@@ -761,7 +761,7 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
-		PROCESS* processes[2];
+		PROCESS** processes = malloc(2*sizeof(PROCESS*));
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
 
