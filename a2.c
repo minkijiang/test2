@@ -780,7 +780,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 			else if (strcmp(argv[i], "--summary") == 0 ) {
 				displayInfo->isSummary = true;
 			}
-			else if (i == 0 && strtol(argv[i], NULL, 10) > 0) {
+			else if (i == 1 && strtol(argv[i], NULL, 10) > 0) {
 				displayInfo->pid = strtol(argv[i], NULL, 10);
 			}
 			else if (getThreshold(argv[i]) != NOTHING) {
@@ -789,7 +789,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 			else if (strcmp(argv[i], "--output_TXT") == 0) {
 				displayInfo->outputTXT = true;
 			}
-			else if (strcmp(argv[i], "--output_BIN") == 0) {
+			else if (strcmp(argv[i], "--output_binary") == 0) {
 				displayInfo->outputBIN = true;
 			}
 			else {
