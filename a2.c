@@ -567,6 +567,26 @@ int getFdCount(int pid) {
 
 }
 
+void testprocess(int pid) {
+	PROCESS* process = createPROCESS(pid);
+
+	char directoryName[MAXLENGTH];
+	strcpy(directoryName, process->processDirectory);
+	strcat(directoryName, "/fd");
+
+	DIR* dir = opendir(directoryName);
+
+	skip(dir);
+
+	int count = 0;
+
+	for (DIRECTORYINFO directoryInfo = readdir(dir); directoryInfo != NULL; directoryInfo = readdir(dir)) {
+		count++;
+	}
+
+	printf("%d.     %d. \n", count, getFdCount(pid));
+}
+
 PROCESS* getProcess(int pid) {
 	PROCESS* process = createPROCESS(pid);
 
@@ -588,11 +608,10 @@ PROCESS* getProcess(int pid) {
 
 	for (int i = 0; i < process->fdCount; i++) {
 
-		//int fd = strtol(directoryInfo->d_name, NULL, 10);
+		int fd = strtol(directoryInfo->d_name, NULL, 10);
 
-		printf("%s", directoryInfo->d_name);
 
-		/*
+		
 
 		char target[MAXLENGTH];
 
@@ -618,7 +637,7 @@ PROCESS* getProcess(int pid) {
 
 		process->FDarr[i] = createFD(fd, target, inode);
 
-		*/
+		
 
 
 
@@ -655,7 +674,8 @@ PROCESS** getAllProcesses(int* processCount) {
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			//processes[*processCount] = getProcess(pid);
-			getProcess(pid);
+			//getProcess(pid);
+			testprocess(pid);
 			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
