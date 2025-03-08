@@ -778,6 +778,8 @@ int main() {
 
 		displaySummary(processes2, n);
 
+		displayOffending(processes2, n, 30);
+
 		freeAllPROCESS(processes, 2);
 		freeAllPROCESS(processes2, n);
 
