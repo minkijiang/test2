@@ -10,7 +10,7 @@
 #include <math.h>
 #include <time.h>
 
-#define MAXLENGTH 256
+#define MAXLENGTH 1024
 #define NOTHRESHOLD 0
 #define ALLPID -1
 #define NOTHING -2
@@ -445,11 +445,13 @@ void displayComposite(PROCESS** processes, int processCount) {
 				printf(" ");
 			}
 
-			/*
+			
 			printf("%d", fd);
 			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
 				printf(" ");
 			}
+
+			/*
 			printf("%s", filename);
 			for (int j = 0; j < lengths[2]+3-strlen(filename); j++) {
 				printf(" ");
