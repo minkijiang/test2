@@ -866,7 +866,7 @@ int main(int argc, char** argv) {
 	*/
 
 	int n;
-	PROCESS* p = getAllProcesses(&n);
+	PROCESS** p = getAllProcesses(&n);
 
 	displaySystemWide(p, n);
 
