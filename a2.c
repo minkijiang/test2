@@ -459,7 +459,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 				printf(" ");
 			}
 			*/
-			printf(".         %d           ", strlen(filename));
+			printf(".         %ld           ", (long int)strlen(filename));
 			printf("%lld\n", inode);
 			
 
