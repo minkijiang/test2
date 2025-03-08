@@ -165,7 +165,7 @@ void freeAllPROCESS(PROCESS** processes, int processCount) {
 		free(processes[i]->processDirectory);
 		free(processes[i]);
 	}
-	free(processes);
+	//free(processes);
 	
 }
 
