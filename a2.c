@@ -368,6 +368,8 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 	for (int i = 0; i < lengths[0]+lengths[2]+strlen("PID")+strlen("Filename"); i++) {
 		printf("=");
 	}
+	printf("\n%d\n", lengths[2]);
+
 	printf("\n");
 
 	free(lengths);
