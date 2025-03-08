@@ -654,7 +654,7 @@ void display(DISPLAYINFO* displayInfo) {
 		if (displayInfo->threshold != NOTHRESHOLD) {displayOffending(allProcesses, processCount, displayInfo->threshold);}
 		if (displayInfo->outputTXT) {writeCompositeTXT(&process, 1);}
 		if (displayInfo->outputBIN) {writeCompositeBIN(&process, 1);}
-		freeAllPROCESS(&process, 1);
+		//freeAllPROCESS(&process, 1);
 	}
 
 	freeAllPROCESS(allProcesses, processCount);
