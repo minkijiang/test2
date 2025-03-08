@@ -668,14 +668,12 @@ int getThreshold(char* arg) {
 		arg[11] = '\0';
 	}
 	else {
-		return -5;
+		return NOTHING;
 	}
 
 	if (strcmp(arg, "--threshold") != 0) {
-		return NOTHRESHOLD;
+		return NOTHING;
 	}
-
-	printf("\n%s\n", arg);
 
 	return strtol(arg+12, NULL, 10);
 }
