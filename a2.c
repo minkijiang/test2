@@ -664,18 +664,21 @@ void display(DISPLAYINFO* displayInfo) {
 
 
 int getThreshold(char* arg) {
-	if (strlen(arg) > 12) {
-		arg[11] = '\0';
+	char arg2[MAXLENGTH];
+	strcpy(arg2, arg);
+
+	if (strlen(arg2) > 12) {
+		arg2[11] = '\0';
 	}
 	else {
 		return NOTHING;
 	}
 
-	if (strcmp(arg, "--threshold") != 0) {
+	if (strcmp(arg2, "--threshold") != 0) {
 		return NOTHING;
 	}
 
-	return strtol(arg+12, NULL, 10);
+	return strtol(arg2+12, NULL, 10);
 }
 
 DISPLAYINFO* processArguments(int argc, char** argv) {
@@ -719,7 +722,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 				fprintf(stderr, "Error: invalid arguments");
 				exit(1);
 			}
-			printf("\n%d\n", displayInfo->threshold);
+			
 		}
 	}
 
