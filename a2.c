@@ -56,6 +56,11 @@ void skip(DIR* dir) {
 
 }
 
+int getDigits(int num) {
+	int digits = log10(num) + 1;
+	return digits;
+}
+
 char* getProcessDirectory(int pid) {
 	char pid_str[MAXLENGTH];
 	sprintf(pid_str, "%d", pid);
@@ -85,11 +90,11 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
-			int pidLength = log10(process->pid)+1;
+			int pidLength = getDigits(process->pid);
 			int fdLength = 1;
-			if (process->FDarr[k]->fd > 0) {fdLength = log10(process->FDarr[k]->fd)+1;}
+			if (process->FDarr[k]->fd > 0) {fdLength = getDigits(process->FDarr[k]->fd); }
 			int fileLength = strlen(process->FDarr[k]->file);
-			int inodeLength = log10(process->FDarr[k]->inode)+1;
+			int inodeLength = getDigits(process->FDarr[k]->inode);
 
 			if (pidLength > maxPidLength) {maxPidLength = pidLength;}
 			if (fdLength > maxFdLength) {maxFdLength = fdLength;}
@@ -304,7 +309,13 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		int* fds = getDistinctFDs(process);
 		for (int k = 0; fds[k] != END; k++) {
-			printf("%d   %d\n", process->pid, fds[k]);
+			printf("%d", process->pid);
+
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				printf(" ");
+			}
+
+			printf("%d\n", fds[k]);
 		}
 		free(fds);
 	}
@@ -336,8 +347,16 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		char** files = getDistinctFiles(process);
 		for (int k = 0; files[k] != NULL; k++) {
-			printf("%d   %s\n", process->pid, files[k]);
+			printf("%d", process->pid);
+
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				printf(" ");
+			}
+
+			printf("%s\n", files[k]);
+
 		}
+
 		for (int k = 0; files[k] != NULL; k++) {
 			free(files[k]);
 		}
@@ -370,12 +389,14 @@ void displayVnode(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		long long int* inodes = getDistinctInodes(process);
 		for (int k = 0; inodes[k] != END; k++) {
-			printf("%d   %lld\n", process->pid, inodes[k]);
+			printf("%d", process->pid);
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				printf(" ");
+			}
+			printf("%lld\n", inodes[k]);
 		}
 		free(inodes);
 	}
-
-
 
 	for (int i = 0; i < lengths[0]+lengths[3]+strlen("PID")+strlen("Inode"); i++) {
 		printf("=");
@@ -414,7 +435,22 @@ void displayComposite(PROCESS** processes, int processCount) {
 			int fd = process->FDarr[k]->fd;
 			char* file = process->FDarr[k]->file;
 			long long int inode = process->FDarr[k]->inode;
-			printf("%d   %d   %s   %lld\n", process->pid, fd, file, inode);
+			
+
+			printf("%d", process->pid);
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				printf(" ");
+			}
+			printf("%d", fd);
+			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
+				printf(" ");
+			}
+			printf("%s", file);
+			for (int j = 0; j < lengths[2]+3-strlen(file); j++) {
+				printf(" ");
+			}
+			printf("%lld\n", inode);
+
 		}
 	}
 
@@ -460,7 +496,20 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			int fd = process->FDarr[k]->fd;
 			char* filename = process->FDarr[k]->file;
 			long long int inode = process->FDarr[k]->inode;
-			fprintf(file, "%d   %d   %s   %lld\n", process->pid, fd, filename, inode);
+
+			fprintf(file, "%d", process->pid);
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				fprintf(file, " ");
+			}
+			fprintf(file, "%d", fd);
+			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
+				fprintf(file, " ");
+			}
+			fprintf(file, "%s", filename);
+			for (int j = 0; j < lengths[2]+3-strlen(filename); j++) {
+				fprintf(file, " ");
+			}
+			fprintf(file, "%lld\n", inode);
 		}
 	}
 
