@@ -102,10 +102,11 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 			if (fdLength > maxFdLength) {maxFdLength = fdLength;}
 			if (fileLength > maxFdLength) {maxFileLength = fileLength;}
 			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
+
+			printf("%d\n", fileLength);
 		}
 
-		int f = strlen(process->FDarr[k]->file);
-		printf("%d\n", f);
+		
 	}
 
 	int* lengths = malloc(4*sizeof(int));
