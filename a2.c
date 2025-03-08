@@ -726,32 +726,14 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 
 }
 
-int test(int argc, char** argv) {
 
-	DISPLAYINFO* displayInfo = processArguments(argc, argv);
-
-	if (isValidProcess(displayInfo->pid)) {
-		display(displayInfo);
-	}
-	else {
-		fprintf(stderr, "Error: invalid processID");
-		exit(1);
-	}
-
-	free(displayInfo);
-
-	return 0;
-}
 
 void wait_ms(int tdelay) {
 	clock_t start_time = clock();
   	while ((clock() - start_time) * 1000 / CLOCKS_PER_SEC < tdelay/1000000);
 }
 
-
-
-int main() {
-
+void test() {
 	int pid = fork();
 
 	int pid2 = 0;
@@ -787,7 +769,24 @@ int main() {
 	else {
 		wait_ms(32000000);
 	}
+}
 
+
+
+int main(int argc, char** argv) {
+
+	DISPLAYINFO* displayInfo = processArguments(argc, argv);
+
+	if (isValidProcess(displayInfo->pid)) {
+		display(displayInfo);
+	}
+	else {
+		fprintf(stderr, "Error: invalid processID");
+		exit(1);
+	}
+
+	free(displayInfo);
 
 	return 0;
+
 }
