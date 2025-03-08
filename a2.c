@@ -681,8 +681,6 @@ int getThreshold(char* arg) {
 DISPLAYINFO* processArguments(int argc, char** argv) {
 	DISPLAYINFO* displayInfo = createDISPLAYINFO();
 
-	printf("\n%d.      %d\n", getThreshold(argv[1]), argc);
-
 	if (argc == 1) {
 		displayInfo->isComposite = true;
 		displayInfo->pid = ALLPID;
@@ -721,6 +719,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 				fprintf(stderr, "Error: invalid arguments");
 				exit(1);
 			}
+			printf("\nahhhh\n");
 		}
 	}
 
@@ -777,6 +776,8 @@ void test() {
 
 int main(int argc, char** argv) {
 
+	
+
 	DISPLAYINFO* displayInfo = processArguments(argc, argv);
 
 	if (isValidProcess(displayInfo->pid)) {
@@ -788,6 +789,9 @@ int main(int argc, char** argv) {
 	}
 
 	free(displayInfo);
+
+	
+
 
 	return 0;
 
