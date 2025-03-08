@@ -496,7 +496,8 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
 			int fd = process->FDarr[k]->fd;
-			char* filename = process->FDarr[k]->file;
+			char filename[MAXLENGTH];
+			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 
 			fprintf(file, "%d", process->pid);
@@ -835,7 +836,6 @@ void test() {
 
 
 int main(int argc, char** argv) {
-
 	
 
 	DISPLAYINFO* displayInfo = processArguments(argc, argv);
@@ -851,6 +851,7 @@ int main(int argc, char** argv) {
 	free(displayInfo);
 
 	
+
 
 
 	return 0;
