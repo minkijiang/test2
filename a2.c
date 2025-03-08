@@ -719,7 +719,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 				fprintf(stderr, "Error: invalid arguments");
 				exit(1);
 			}
-			printf("\nahhhh\n");
+			printf("\n%d\n", displayInfo->threshold);
 		}
 	}
 
