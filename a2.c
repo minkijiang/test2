@@ -435,7 +435,8 @@ void displayComposite(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
 			int fd = process->FDarr[k]->fd;
-			char* file = process->FDarr[k]->file;
+			char filename[MAXLENGTH];
+			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 			
 
@@ -447,8 +448,8 @@ void displayComposite(PROCESS** processes, int processCount) {
 			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
 				printf(" ");
 			}
-			printf("%s", file);
-			for (int j = 0; j < lengths[2]+3-strlen(file); j++) {
+			printf("%s", filename);
+			for (int j = 0; j < lengths[2]+3-strlen(filename); j++) {
 				printf(" ");
 			}
 			printf("%lld\n", inode);
@@ -504,6 +505,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				fprintf(file, " ");
 			}
+
 			fprintf(file, "%d", fd);
 			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
 				fprintf(file, " ");
@@ -513,6 +515,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 				fprintf(file, " ");
 			}
 			fprintf(file, "%lld\n", inode);
+
 		}
 	}
 
@@ -541,7 +544,8 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
 			int fd = process->FDarr[k]->fd;
-			char* filename = process->FDarr[k]->file;
+			char filename[MAXLENGTH];
+			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 
 			fwrite(&process->pid, sizeof(int), 1, file);
