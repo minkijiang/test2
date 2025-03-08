@@ -841,8 +841,7 @@ int main() {
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
 
-		//printf("\n\n %d.    %d\n ", pid, pid2);
-		//displaySummary(processes2, n);
+		displaySummary(processes2, n);
 
 
 	
