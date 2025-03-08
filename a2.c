@@ -455,7 +455,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 			printf("%s", filename);
 
 			
-			for (int j = 0; j < lengths[2]+3-(int)strlen(filename); j++) {
+			for (long int j = 0; j < lengths[2]+3-(long int)strlen(filename); j++) {
 				printf(" ");
 			}
 			
