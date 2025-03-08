@@ -639,7 +639,6 @@ PROCESS** getAllProcesses(int* processCount) {
 		if (isValidProcess(pid)) {
 			processes = realloc(processes, ((*processCount)+1)*sizeof(PROCESS*));
 			processes[*processCount] = getProcess(pid);
-			processes[*processCount] = NULL;
 			(*processCount)++;
 		}
 	}
