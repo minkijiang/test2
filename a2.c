@@ -68,6 +68,7 @@ char* getProcessDirectory(int pid) {
 	directoryName[0] = '\0';
 	strcat(directoryName, "/proc/");
 	strcat(directoryName, pid_str);
+	strcat(directoryName, "/fd");
 
 	return directoryName;
 
@@ -174,7 +175,6 @@ bool isValidProcess(int pid) {
 	}
 
 	char* processDirectory = getProcessDirectory(pid);
-	strcat(processDirectory, "/fd");
 
 	DIR* dir = opendir(processDirectory);
 	free(processDirectory);
@@ -540,7 +540,6 @@ int getFdCount(int pid) {
 	char directoryName[MAXLENGTH];
 
 	strcpy(directoryName, getProcessDirectory(pid));
-	strcat(directoryName, "/fd");
 
 	DIR* dir = opendir(directoryName);
 	if (dir == NULL) {
@@ -567,24 +566,58 @@ int getFdCount(int pid) {
 
 }
 
-void testprocess(int pid) {
+PROCESS* testprocess(int pid) {
 	PROCESS* process = createPROCESS(pid);
 
-	char directoryName[MAXLENGTH];
-	strcpy(directoryName, process->processDirectory);
-	strcat(directoryName, "/fd");
+	DIR* dir = opendir(process->processDirectory);
+	if (dir == NULL) {
+		fprintf(stderr, "failed to read process directory\n");
+		exit(1);
+	}
 
-	DIR* dir = opendir(directoryName);
+	process->FDarr = malloc(sizeof(FD));
 
 	skip(dir);
 
-	int count = 0;
+	for (DIRECTORYINFO directoryInfo = readdir(dir); directoryInfo != NULL ; directoryInfo = readdir(dir)) {
 
-	for (DIRECTORYINFO directoryInfo = readdir(dir); directoryInfo != NULL; directoryInfo = readdir(dir)) {
-		count++;
+		int fd = strtol(directoryInfo->d_name, NULL, 10);
+
+		char target[MAXLENGTH];
+
+		char link[MAXLENGTH];
+		strcpy(link, process->processDirectory);
+		strcat(link, "/");
+		strcat(link, directoryInfo->d_name);
+
+		int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
+		if (targetLength == -1) {
+			fprintf(stderr, "failed to read fd\n");
+			exit(1);
+		}
+		target[targetLength] = '\0';
+
+		struct stat fileStat;
+		if (stat(link, &fileStat) == -1) {
+			fprintf(stderr, "failed to read fd\n");
+			exit(1);
+		}
+
+		long long int inode = (long long int)fileStat.st_ino;
+
+		process->FDarr = realloc(process->FDarr, (process->fdCount+1)*sizeof(FD));
+		process->FDarr[process->fdCount] = createFD(fd, target, inode);
+		process->fdCount += 1;
+
 	}
 
-	printf("%d.     %d. \n", count, getFdCount(pid));
+	int isClosed = closedir(dir);
+	if (isClosed != 0) {
+		fprintf(stderr, "failed to close process directory\n");
+		exit(1);
+	}
+
+	return process;
 }
 
 PROCESS* getProcess(int pid) {
@@ -610,9 +643,6 @@ PROCESS* getProcess(int pid) {
 
 		int fd = strtol(directoryInfo->d_name, NULL, 10);
 
-
-		
-
 		char target[MAXLENGTH];
 
 		char link[MAXLENGTH];
@@ -636,10 +666,6 @@ PROCESS* getProcess(int pid) {
 		long long int inode = (long long int)fileStat.st_ino;
 
 		process->FDarr[i] = createFD(fd, target, inode);
-
-		
-
-
 
 		directoryInfo = readdir(dir);
 
