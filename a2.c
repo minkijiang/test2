@@ -57,6 +57,9 @@ void skip(DIR* dir) {
 }
 
 int getDigits(int num) {
+	if (num == 0) {
+		return 1;
+	}
 	int digits = log10(num) + 1;
 	return digits;
 }
@@ -91,8 +94,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
 			int pidLength = getDigits(process->pid);
-			int fdLength = 1;
-			if (process->FDarr[k]->fd > 0) {fdLength = getDigits(process->FDarr[k]->fd); }
+			int fdLength = getDigits(process->FDarr[k]->fd); 
 			int fileLength = strlen(process->FDarr[k]->file);
 			int inodeLength = getDigits(process->FDarr[k]->inode);
 
