@@ -534,36 +534,6 @@ void displayOffending(PROCESS** processes, int processNumber, int threshold) {
 	}
 }
 
-int getFdCount(int pid) {
-	char directoryName[MAXLENGTH];
-
-	strcpy(directoryName, getProcessDirectory(pid));
-
-	DIR* dir = opendir(directoryName);
-	if (dir == NULL) {
-		fprintf(stderr, "failed to read process directory\n");
-		exit(1);
-	}
-
-	skip(dir);
-	DIRECTORYINFO directoryInfo = readdir(dir);
-	int fdCount = 0;
-
-	while (directoryInfo != NULL) {
-		fdCount++;
-		directoryInfo = readdir(dir);
-	}
-
-	int isClosed = closedir(dir);
-	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory\n");
-		exit(1);
-	}
-
-	return fdCount;
-
-}
-
 PROCESS* getProcess(int pid) {
 	PROCESS* process = createPROCESS(pid);
 
@@ -776,33 +746,6 @@ void wait_ms(int tdelay) {
   	while ((clock() - start_time) * 1000 / CLOCKS_PER_SEC < tdelay/1000000);
 }
 
-/*
-
-PROCESS** getprocessesTEST() {
-	PROCESS** processes = malloc(10*sizeof(PROCESS*));
-
-	int pid = fork();
-	processes[0] = getProcess(pid);
-
-	for (int i = 1; i < 10; i++) {
-		if (pid != 0) {
-			pid = fork();
-			processes[i] = getProcess(pid);
-		}
-		else {
-			wait_ms(2000000);
-			exit(0);
-		}
-	}
-	if (pid == 0) {
-		wait_ms(2000000);
-		exit(0);
-	}
-
-	return processes;
-}
-
-*/
 
 
 int main() {
@@ -816,12 +759,9 @@ int main() {
 
 	if (pid != 0 && pid2 != 0) {
 
-		
-		
 		PROCESS* processes[2];
 		processes[0] = getProcess(pid);
 		processes[1] = getProcess(pid2);
-		
 
 		displayProcessFD(processes, 2);
 		displaySystemWide(processes, 2);
@@ -831,26 +771,18 @@ int main() {
 		writeCompositeTXT(processes, 2);
 		writeCompositeBIN(processes, 2);
 
-		
-
-		
-
 		int n;
 		PROCESS** processes2 = getAllProcesses(&n);
 
 		displaySummary(processes2, n);
 
-
-	
-		
+		freeAllPROCESS(processes, 2);
+		freeAllPROCESS(processes2, n);
 
 	}
 	else {
 		wait_ms(32000000);
 	}
-
-	//TODO: remove duplicates
-	
 
 
 	return 0;
