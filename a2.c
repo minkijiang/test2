@@ -70,7 +70,7 @@ char* getProcessDirectory(int pid) {
 
 	char* directoryName = malloc(MAXLENGTH*sizeof(char));
 	if (directoryName == NULL) {
-		fprintf(stderr, "Error: failed to malloc\n");
+		perror("malloc failed");
 		exit(1);
 	}
 	directoryName[0] = '\0';
@@ -108,6 +108,11 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 	}
 
 	int* lengths = malloc(4*sizeof(int));
+	if (lengths == NULL) {
+		perror("malloc failed: ");
+		exit(1);
+	}
+
 	lengths[0] = maxPidLength;
 	lengths[1] = maxFdLength;
 	lengths[2] = maxFileLength;
@@ -120,7 +125,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 FD* createFD(int fd, char file[MAXLENGTH], int inode) {
 	FD* newFD = malloc(sizeof(FD));
 	if (newFD == NULL) {
-		fprintf(stderr, "Error: failed to malloc\n");
+		perror("malloc for FD failed");
 		exit(1);
 	}
 
@@ -134,7 +139,7 @@ FD* createFD(int fd, char file[MAXLENGTH], int inode) {
 PROCESS* createPROCESS(int pid) {
 	PROCESS* newProcess = malloc(sizeof(PROCESS));
 	if (newProcess == NULL) {
-		fprintf(stderr, "Error: failed to malloc\n");
+		perror("malloc for PROCESS failed");
 		exit(1);
 	}
 
@@ -148,6 +153,11 @@ PROCESS* createPROCESS(int pid) {
 
 DISPLAYINFO* createDISPLAYINFO() {
 	DISPLAYINFO* newDisplayInfo = malloc(sizeof(DISPLAYINFO));
+
+	if (newDisplayInfo == NULL) {
+		perror("malloc for DISPLAYINFO failed");
+		exit(1);
+	}
 
 	newDisplayInfo->isProcessFD = false;
 	newDisplayInfo->isSystemWide = false;
@@ -189,21 +199,15 @@ bool isValidProcess(int pid) {
 	DIR* dir = opendir(processDirectory);
 	free(processDirectory);
 
-	if (dir == NULL) {return false;}
-
-	/*
-
-	if (dir == NULL && errno == ENOENT) {return false;}
+	if (dir == NULL && (errno == ENOENT || errno == EACCES)) {return false;}
 	else if (dir == NULL) {
-		fprintf(stderr, "Error: couldn't open process file\n");
+		perror("open process directory failed");
 		exit(1);
 	}
 
-	*/
-
 	int isClosed = closedir(dir);
 	if (isClosed != 0) { 
-		fprintf(stderr, "Error: failed to close process file\n");
+		perror("close process directory failed");
 		exit(1);
 	}
 
@@ -243,6 +247,11 @@ bool inStrArray(char** arr, int size, char* word) {
 int* getDistinctFDs(PROCESS* process) {
 	int* arr = malloc(sizeof(int));
 
+	if (arr == NULL) {
+		perror("malloc failed");
+		exit(1);
+	}
+
 	int count = 0;
 	for (int i = 0; i < process->fdCount; i++) {
 		int fd = process->FDarr[i]->fd;
@@ -254,11 +263,17 @@ int* getDistinctFDs(PROCESS* process) {
 	}
 	arr = realloc(arr, (count+1)*sizeof(int));
 	arr[count] = END;
+
 	return arr;
 }
 
 char** getDistinctFiles(PROCESS* process) {
 	char** arr = malloc(sizeof(char*));
+
+	if (arr == NULL) {
+		perror("malloc failed");
+		exit(1);
+	}
 
 	int count = 0;
 	for (int i = 0; i < process->fdCount; i++) {
@@ -281,6 +296,11 @@ char** getDistinctFiles(PROCESS* process) {
 long long int* getDistinctInodes(PROCESS* process) {
 	long long int* arr = malloc(sizeof(long long int));
 
+	if (arr == NULL) {
+		perror("malloc failed");
+		exit(1);
+	}
+
 	int count = 0;
 	for (int i = 0; i < process->fdCount; i++) {
 		int inode = process->FDarr[i]->inode;
@@ -292,6 +312,7 @@ long long int* getDistinctInodes(PROCESS* process) {
 	}
 	arr = realloc(arr, (count+1)*sizeof(long long int));
 	arr[count] = END;
+
 	return arr;
 }
 
@@ -481,7 +502,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 void writeCompositeTXT(PROCESS** processes,  int processCount) {
 	FILE* file = fopen("compositeTable.txt", "w");
 	if (file == NULL) {
-		fprintf(stderr, "Error: could not write to compositeTable.txt\n");
+		perror("open compositeTable.txt failed");
 		exit(1);
 	}
 
@@ -539,7 +560,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 
 	int isClosed = fclose(file);
 	if (isClosed != 0) {
-		fprintf(stderr, "Error: could not close compositeTable.txt\n");
+		perror("close compositeTable.txt failed");
 		exit(1);
 	}
 }
@@ -548,7 +569,7 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 	FILE* file = fopen("compositeTable.bin", "wb");
 
 	if (file == NULL) {
-		fprintf(stderr, "Error: could not write to compositeTable.bin\n");
+		perror("open compositeTable.bin failed");
 		exit(1);
 	}
 
@@ -572,7 +593,7 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 
 	int isClosed = fclose(file);
 	if (isClosed != 0) {
-		fprintf(stderr, "Error: could not close compositeTable.bin\n");
+		perror("close compositeTable.bin failed");
 		exit(1);
 	}
 }
@@ -608,7 +629,7 @@ PROCESS* getProcess(int pid) {
 
 	DIR* dir = opendir(process->processDirectory);
 	if (dir == NULL) {
-		fprintf(stderr, "failed to read process directory\n");
+		perror("open process directory failed");
 		exit(1);
 	}
 
@@ -629,14 +650,14 @@ PROCESS* getProcess(int pid) {
 
 		int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
 		if (targetLength == -1) {
-			fprintf(stderr, "failed to read fd\n");
+			perror("readlink failed");
 			exit(1);
 		}
 		target[targetLength] = '\0';
 
 		struct stat fileStat;
 		if (stat(link, &fileStat) == -1) {
-			fprintf(stderr, "failed to read fd\n");
+			perror("stat failed");
 			exit(1);
 		}
 
@@ -650,7 +671,7 @@ PROCESS* getProcess(int pid) {
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory\n");
+		perror("close process directory failed");
 		exit(1);
 	}
 
@@ -666,7 +687,7 @@ PROCESS** getAllProcesses(int* processCount) {
 
 	DIR* dir = opendir("/proc");
 	if (dir == NULL) {
-		fprintf(stderr, "failed to read proc directory\n");
+		perror("open proc directory failed");
 		exit(1);
 	}
 
@@ -684,7 +705,7 @@ PROCESS** getAllProcesses(int* processCount) {
 
 	int isClosed = closedir(dir);
 	if (isClosed != 0) {
-		fprintf(stderr, "failed to close process directory\n");
+		perror("close proc directory failed");
 		exit(1);
 	}
 
@@ -804,12 +825,7 @@ DISPLAYINFO* processArguments(int argc, char** argv) {
 
 }
 
-
-
-void wait_ms(int tdelay) {
-	clock_t start_time = clock();
-  	while ((clock() - start_time) * 1000 / CLOCKS_PER_SEC < tdelay/1000000);
-}
+/*
 
 void test() {
 	int pid = fork();
@@ -849,6 +865,8 @@ void test() {
 	}
 }
 
+*/
+
 
 
 int main(int argc, char** argv) {
@@ -865,12 +883,6 @@ int main(int argc, char** argv) {
 	}
 
 	free(displayInfo);
-
-	
-
-	
-
-
 
 	return 0;
 
