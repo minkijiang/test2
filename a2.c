@@ -335,7 +335,11 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		int* fds = getDistinctFDs(process);
 		for (int k = 0; fds[k] != END; k++) {
-			printf("%d   ", count);
+			printf("%d", count);
+			for (int j = 0; j < (2*getDigits(process->fdCount))-getDigits(count); j++) {
+				printf(" ");
+			}
+
 			printf("%d", process->pid);
 
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -376,7 +380,11 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		char** files = getDistinctFiles(process);
 		for (int k = 0; files[k] != NULL; k++) {
-			printf("%d   ", count);
+			printf("%d", count);
+			for (int j = 0; j < (2*getDigits(process->fdCount))-getDigits(count); j++) {
+				printf(" ");
+			}
+
 			printf("%d", process->pid);
 
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -422,7 +430,11 @@ void displayVnode(PROCESS** processes, int processCount) {
 		PROCESS* process = processes[i];
 		long long int* inodes = getDistinctInodes(process);
 		for (int k = 0; inodes[k] != END; k++) {
-			printf("%d   ", count);
+			printf("%d", count);
+			for (int j = 0; j < (2*getDigits(process->fdCount))-getDigits(count); j++) {
+				printf(" ");
+			}
+
 			printf("%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				printf(" ");
@@ -473,7 +485,10 @@ void displayComposite(PROCESS** processes, int processCount) {
 			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 			
-			printf("%d   ", count);
+			printf("%d", count);
+			for (int j = 0; j < (2*getDigits(process->fdCount))-getDigits(count); j++) {
+				printf(" ");
+			}
 
 			printf("%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -547,7 +562,11 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 
-			printf("%d   ", count);
+			printf("%d", count);
+			for (int j = 0; j < (2*getDigits(process->fdCount))-getDigits(count); j++) {
+				printf(" ");
+			}
+			
 			fprintf(file, "%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				fprintf(file, " ");
@@ -902,3 +921,13 @@ int main(int argc, char** argv) {
 	return 0;
 
 }
+
+// cd /cmshome/jiangm95/cscb09w25_space/projects
+
+//.  cd /cmshome/jiangm95/cscb09w25_space/projects/test2
+
+//. gcc -Wall -Werror --std=c99 stuff.c
+
+//.  ssh jiangm95@it-ia3170-03.utsc-labs.utoronto.ca 
+
+// gcc a2.c -lm -fsanitize=address
