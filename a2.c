@@ -90,6 +90,8 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 	int maxFileLength = 0;
 	int maxInodeLength = 0;
 
+	int totalFdCount = 0;
+
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
@@ -102,12 +104,14 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 			if (fdLength > maxFdLength) {maxFdLength = fdLength;}
 			if (fileLength > maxFileLength) {maxFileLength = fileLength;}
 			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
+
+			totalFD++;
 		}
 
 		
 	}
 
-	int* lengths = malloc(4*sizeof(int));
+	int* lengths = malloc(5*sizeof(int));
 	if (lengths == NULL) {
 		perror("malloc failed: ");
 		exit(1);
@@ -117,6 +121,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 	lengths[1] = maxFdLength;
 	lengths[2] = maxFileLength;
 	lengths[3] = maxInodeLength;
+	lengths[4] = totalFdCount;
 
 	return lengths;
 }
@@ -336,7 +341,7 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 		int* fds = getDistinctFDs(process);
 		for (int k = 0; fds[k] != END; k++) {
 			printf("%d", count);
-			for (int j = 0; j < 3+getDigits(process->fdCount)-getDigits(count); j++) {
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
 				printf(" ");
 			}
 
@@ -381,7 +386,7 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 		char** files = getDistinctFiles(process);
 		for (int k = 0; files[k] != NULL; k++) {
 			printf("%d", count);
-			for (int j = 0; j < 3+getDigits(process->fdCount)-getDigits(count); j++) {
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
 				printf(" ");
 			}
 
@@ -431,7 +436,7 @@ void displayVnode(PROCESS** processes, int processCount) {
 		long long int* inodes = getDistinctInodes(process);
 		for (int k = 0; inodes[k] != END; k++) {
 			printf("%d", count);
-			for (int j = 0; j < 3+getDigits(process->fdCount)-getDigits(count); j++) {
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
 				printf(" ");
 			}
 
@@ -486,7 +491,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 			long long int inode = process->FDarr[k]->inode;
 			
 			printf("%d", count);
-			for (int j = 0; j < 3+getDigits(process->fdCount)-getDigits(count); j++) {
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
 				printf(" ");
 			}
 
@@ -563,7 +568,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			long long int inode = process->FDarr[k]->inode;
 
 			printf("%d", count);
-			for (int j = 0; j < 3+getDigits(process->fdCount)-getDigits(count); j++) {
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
 				printf(" ");
 			}
 
