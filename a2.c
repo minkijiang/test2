@@ -319,7 +319,7 @@ long long int* getDistinctInodes(PROCESS* process) {
 void displayProcessFD(PROCESS** processes, int processCount) {
 	
 	printf("\n\n");
-	printf("PID");
+	printf("      PID");
 	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
@@ -330,10 +330,12 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 	}
 	printf("\n");
 
+	int count = 1;
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		int* fds = getDistinctFDs(process);
 		for (int k = 0; fds[k] != END; k++) {
+			printf("%d   ", count);
 			printf("%d", process->pid);
 
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -341,6 +343,7 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 			}
 
 			printf("%d\n", fds[k]);
+			count++;
 		}
 		free(fds);
 	}
@@ -357,7 +360,7 @@ void displayProcessFD(PROCESS** processes, int processCount) {
 void displaySystemWide(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
-	printf("PID");
+	printf("      PID");
 	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
@@ -368,10 +371,12 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 	}
 	printf("\n");
 
+	int count = 1;
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		char** files = getDistinctFiles(process);
 		for (int k = 0; files[k] != NULL; k++) {
+			printf("%d   ", count);
 			printf("%d", process->pid);
 
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -379,6 +384,7 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 			}
 
 			printf("%s\n", files[k]);
+			count++;
 
 		}
 
@@ -400,7 +406,7 @@ void displaySystemWide(PROCESS** processes, int processCount) {
 void displayVnode(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
-	printf("PID");
+	printf("      PID");
 	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
@@ -411,15 +417,18 @@ void displayVnode(PROCESS** processes, int processCount) {
 	}
 	printf("\n");
 
+	int count = 1;
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		long long int* inodes = getDistinctInodes(process);
 		for (int k = 0; inodes[k] != END; k++) {
+			printf("%d   ", count);
 			printf("%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				printf(" ");
 			}
 			printf("%lld\n", inodes[k]);
+			count++;
 		}
 		free(inodes);
 	}
@@ -435,7 +444,7 @@ void displayVnode(PROCESS** processes, int processCount) {
 void displayComposite(PROCESS** processes, int processCount) {
 
 	printf("\n\n");
-	printf("PID");
+	printf("      PID");
 	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		printf(" ");
@@ -455,6 +464,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 	}
 	printf("\n");
 
+	int count = 1;
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
@@ -463,6 +473,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 			
+			printf("%d   ", count);
 
 			printf("%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
@@ -484,6 +495,7 @@ void displayComposite(PROCESS** processes, int processCount) {
 			}
 			
 			printf("%lld\n", inode);
+			count++;
 			
 
 		}
@@ -506,7 +518,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 		exit(1);
 	}
 
-	fprintf(file, "PID");
+	fprintf(file, "      PID");
 	int* lengths = getStringLengths(processes, processCount);
 	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
 		fprintf(file, " ");
@@ -526,6 +538,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 	}
 	fprintf(file, "\n");
 
+	int count = 1;
 	for (int i = 0; i < processCount; i++) {
 		PROCESS* process = processes[i];
 		for (int k = 0; k < process->fdCount; k++) {
@@ -534,6 +547,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 
+			printf("%d   ", count);
 			fprintf(file, "%d", process->pid);
 			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
 				fprintf(file, " ");
@@ -548,6 +562,7 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 				fprintf(file, " ");
 			}
 			fprintf(file, "%lld\n", inode);
+			count++;
 
 		}
 	}
