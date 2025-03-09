@@ -105,7 +105,7 @@ int* getStringLengths(PROCESS** processes, int processCount) {
 			if (fileLength > maxFileLength) {maxFileLength = fileLength;}
 			if (inodeLength > maxInodeLength) {maxInodeLength = inodeLength;}
 
-			totalFD++;
+			totalFdCount++;
 		}
 
 		
