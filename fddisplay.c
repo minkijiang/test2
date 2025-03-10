@@ -333,9 +333,9 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 			strcpy(filename, process->FDarr[k]->file);
 			long long int inode = process->FDarr[k]->inode;
 
-			printf("%d", count);
+			fprintf(file, "%d", count);
 			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
-				printf(" ");
+				fprintf(file, " ");
 			}
 
 			fprintf(file, "%d", process->pid);
