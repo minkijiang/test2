@@ -1,23 +1,8 @@
 #include "getprocess.h"
 #include <sys/stat.h>
 #include <dirent.h>
+#include <unistd.h>
 
-void skip(DIR* dir) {
-	DIRECTORYINFO directoryInfo;
-	directoryInfo = readdir(dir);
-	directoryInfo = readdir(dir);
-
-	/*
-	long int pos;
-	while (directoryInfo->d_name[0] == '.') {
-		pos = telldir(dir);
-		directoryInfo = readdir(dir);
-	}
-	seekdir(dir, pos);
-
-	*/
-
-}
 
 bool isValidProcess(int pid) {
 
@@ -57,37 +42,37 @@ PROCESS* getProcess(int pid) {
 
 	process->FDarr = malloc(sizeof(FD));
 
-	skip(dir);
-
 	for (DIRECTORYINFO directoryInfo = readdir(dir); directoryInfo != NULL ; directoryInfo = readdir(dir)) {
 
-		int fd = strtol(directoryInfo->d_name, NULL, 10);
+		if (directoryInfo->d_name[0] != '.') {
+			int fd = strtol(directoryInfo->d_name, NULL, 10);
 
-		char target[MAXLENGTH];
+			char target[MAXLENGTH];
 
-		char link[MAXLENGTH];
-		strcpy(link, process->processDirectory);
-		strcat(link, "/");
-		strcat(link, directoryInfo->d_name);
+			char link[MAXLENGTH];
+			strcpy(link, process->processDirectory);
+			strcat(link, "/");
+			strcat(link, directoryInfo->d_name);
 
-		int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
-		if (targetLength == -1) {
-			perror("readlink failed");
-			exit(1);
+			int targetLength = readlink(link, target, (MAXLENGTH-1)*sizeof(char));
+			if (targetLength == -1) {
+				perror("readlink failed");
+				exit(1);
+			}
+			target[targetLength] = '\0';
+
+			FILESTAT fileStat;
+			if (stat(link, &fileStat) == -1) {
+				perror("stat failed");
+				exit(1);
+			}
+
+			long long int inode = (long long int)fileStat.st_ino;
+
+			process->FDarr = realloc(process->FDarr, (process->fdCount+1)*sizeof(FD));
+			process->FDarr[process->fdCount] = createFD(fd, target, inode);
+			process->fdCount += 1;
 		}
-		target[targetLength] = '\0';
-
-		FILESTAT fileStat;
-		if (stat(link, &fileStat) == -1) {
-			perror("stat failed");
-			exit(1);
-		}
-
-		long long int inode = (long long int)fileStat.st_ino;
-
-		process->FDarr = realloc(process->FDarr, (process->fdCount+1)*sizeof(FD));
-		process->FDarr[process->fdCount] = createFD(fd, target, inode);
-		process->fdCount += 1;
 
 	}
 
@@ -113,7 +98,6 @@ PROCESS** getAllProcesses(int* processCount) {
 		exit(1);
 	}
 
-	skip(dir);
 	*processCount = 0;
 
 	for (DIRECTORYINFO directoryInfo = readdir(dir) ; directoryInfo != NULL; directoryInfo = readdir(dir)) {
