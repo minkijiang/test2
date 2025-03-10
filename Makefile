@@ -1,5 +1,5 @@
 CFLAGS = --std=c99 -Wall -Werror 
-LDFLAGS = -lm
+LDFLAGS = -lm -lc
 CC = gcc
 
 showFDtables: showFDtables.c fdstruct.o processcla.o fddisplay.o getprocess.o
