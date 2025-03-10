@@ -370,6 +370,81 @@ void writeCompositeTXT(PROCESS** processes,  int processCount) {
 	}
 }
 
+void writeCompositeBIN(PROCESS** processes,  int processCount) {
+	FILE* file = fopen("compositeTable.bin", "wb");
+	if (file == NULL) {
+		perror("open compositeTable.bin failed");
+		exit(1);
+	}
+
+	fwrite("      PID", sizeof(char), 9, file);
+	int* lengths = getStringLengths(processes, processCount);
+	for (int i = 0; i < lengths[0]+3-strlen("PID"); i++) {
+		fwrite(" ", sizeof(char), 1, file);
+	}
+	fwrite("FD", sizeof(char), 2, file);
+	for (int i = 0; i < lengths[1]+3-strlen("FD"); i++) {
+		fwrite(" ", sizeof(char), 1, file);
+	}
+	fwrite("Filename", sizeof(char), 8, file);
+	for (int i = 0; i < lengths[2]+3-strlen("Filename"); i++) {
+		fwrite(" ", sizeof(char), 1, file);
+	}
+	fwrite("Inode", sizeof(char), 5, file);
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		fwrite("=", sizeof(char), 1, file);
+	}
+	fwrite("\n", sizeof(char), 1, file);
+
+	int count = 1;
+	for (int i = 0; i < processCount; i++) {
+		PROCESS* process = processes[i];
+		for (int k = 0; k < process->fdCount; k++) {
+			int pid = process->pid;
+			int fd = process->FDarr[k]->fd;
+			char filename[MAXLENGTH];
+			strcpy(filename, process->FDarr[k]->file);
+			long long int inode = process->FDarr[k]->inode;
+
+			fwrite(&count, sizeof(int), 1, file);
+			for (int j = 0; j < 3+getDigits(lengths[4])-getDigits(count); j++) {
+				fwrite(" ", sizeof(char), 1, file);
+			}
+
+			fwrite(&pid, sizeof(int), 1, file);
+			for (int j = 0; j < lengths[0]+3-getDigits(process->pid); j++) {
+				fwrite(" ", sizeof(char), 1, file);
+			}
+
+			fwrite(&fd, sizeof(int), 1, file);
+			for (int j = 0; j < lengths[1]+3-getDigits(fd); j++) {
+				fwrite(" ", sizeof(char), 1, file);
+			}
+			fwrite(filename, sizeof(char), MAXLENGTH, file);
+			for (int j = 0; j < lengths[2]+3-(int)strlen(filename); j++) {
+				fwrite(" ", sizeof(char), 1, file);
+			}
+			fwrite(&inode, sizeof(long long int), 1, file);
+			count++;
+
+		}
+	}
+
+	for (int i = 0; i < lengths[0]+lengths[1]+lengths[2]+lengths[3]+strlen("PID")+strlen("FD")+strlen("Filename")+strlen("Inode"); i++) {
+		fwrite("=", sizeof(char), 1, file);
+	}
+
+	free(lengths);
+
+	int isClosed = fclose(file);
+	if (isClosed != 0) {
+		perror("close compositeTable.txt failed");
+		exit(1);
+	}
+}
+
+/*
 void writeCompositeBIN(PROCESS** processes, int processCount) {
 	FILE* file = fopen("compositeTable.bin", "wb");
 
@@ -399,6 +474,7 @@ void writeCompositeBIN(PROCESS** processes, int processCount) {
 		exit(1);
 	}
 }
+*/
 
 void displaySummary(PROCESS** processes, int numProcess) {
 	printf("\n\n");
