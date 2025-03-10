@@ -118,8 +118,3 @@ PROCESS** getAllProcesses(int* processCount) {
 	return processes;
 }
 
-int main()
-{
-	
-	return 0;
-}
