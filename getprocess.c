@@ -118,7 +118,7 @@ PROCESS** getAllProcesses(int* processCount) {
 	return processes;
 }
 
-int int main()
+int main()
 {
 	
 	return 0;
